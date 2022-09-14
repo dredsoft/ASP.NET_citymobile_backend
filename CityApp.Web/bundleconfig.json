@@ -1,0 +1,120 @@
+[
+  {
+    "outputFileName": "wwwroot/css/site.min.css",
+    "inputFiles": [
+      "wwwroot/css/site.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/site.min.js",
+    "inputFiles": [
+      "wwwroot/js/site.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/material-dashboard.min.js",
+    "inputFiles": [
+      "wwwroot/js/material-dashboard.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/css/material-dashboard.min.css",
+    "inputFiles": [
+      "wwwroot/css/material-dashboard.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/lib/jquery-tags-input/src/jquery.tagsinput.min.js",
+    "inputFiles": [
+      "wwwroot/lib/jquery-tags-input/src/jquery.tagsinput.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/lib/bootstrap-datetimepicker.min.js",
+    "inputFiles": [
+      "wwwroot/lib/bootstrap-datetimepicker.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/demo.min.js",
+    "inputFiles": [
+      "wwwroot/js/demo.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/citation/citation.min.js",
+    "inputFiles": [
+      "wwwroot/js/citation/citation.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/citation/HeatMap.min.js",
+    "inputFiles": [
+      "wwwroot/js/citation/HeatMap.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/css/Citation.min.css",
+    "inputFiles": [
+      "wwwroot/css/Citation.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/home/dashboard.min.js",
+    "inputFiles": [
+      "wwwroot/js/home/dashboard.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/Event/Event.min.js",
+    "inputFiles": [
+      "wwwroot/js/Event/Event.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/violation/EditViolation.min.js",
+    "inputFiles": [
+      "wwwroot/js/violation/EditViolation.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/Admin/AccountUser.min.js",
+    "inputFiles": [
+      "wwwroot/js/Admin/AccountUser.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/printPreview.min.js",
+    "inputFiles": [
+      "wwwroot/js/printPreview.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/citation/Index.min.js",
+    "inputFiles": [
+      "wwwroot/js/citation/Index.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/Event/EventLocation.min.js",
+    "inputFiles": [
+      "wwwroot/js/Event/EventLocation.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/Event/EventViolationPricing.min.js",
+    "inputFiles": [
+      "wwwroot/js/Event/EventViolationPricing.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/ajaxService.min.js",
+    "inputFiles": [
+      "wwwroot/js/ajaxService.js"
+    ]
+  }
+]

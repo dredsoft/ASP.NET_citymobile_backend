@@ -1,0 +1,162 @@
+@model CityApp.Web.Areas.Admin.Models.CitationReceiptViewModel
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_InternalLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header card-header-icon" data-background-color="green">
+                    Citation Receipt
+                </div>
+                <div class="card-content">
+
+                    <form method="post" role="form" asp-antiforgery="true" class="with-ajax" enctype="multipart/form-data">
+                        <div class="row mrgnTop30">
+                            <div class="col-sm-12">
+                                <div asp-validation-summary="ModelOnly"></div>
+                            </div>
+                        </div>
+                        <div class="col-sm-10">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group label-floating">
+                                        <label asp-for="AccountNumber" class="control-label"></label>
+                                        <input asp-for="AccountNumber" type="text" class="form-control">
+                                        <span asp-validation-for="AccountNumber" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group label-floating">
+                                        <label asp-for="CitationNumber" class="control-label"></label>
+                                        <input asp-for="CitationNumber" type="text" class="form-control">
+                                        <span asp-validation-for="CitationNumber" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group label-floating">
+                                        <input type="file" name="file" multiple style="opacity:1;position:relative;" />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <button type="submit" id="btnVerify" class="btn btn-fill btn-rose">Verify<div class="ripple-container"></div></button>
+                                </div>
+                            </div>
+
+
+                            <div class="row mt">
+                                <div class="col-md-12">
+                                    <h3>Receipt Information</h3>
+                                    <hr />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 tim-typo">
+                                    <h4 class="card-title">
+                                        <span class="tim-note">Submitted: </span>@Model.Submitted
+                                    </h4>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 tim-typo">
+                                    <h4 class="card-title">
+                                        <span class="tim-note">Device: </span>@Model.Device
+                                    </h4>
+                                </div>
+                                <div class="col-md-6 tim-typo">
+                                    <h4 class="card-title">
+                                        <span class="tim-note">User: </span>@Model.Email
+                                    </h4>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 tim-typo">
+                                    <h4>
+                                        <span class="tim-note">Longitude: </span>@Model.Longitude
+                                    </h4>
+                                </div>
+                                <div class="col-md-6 tim-typo">
+                                    <h4 class="card-title">
+                                        <span class="tim-note">Latitude: </span>@Model.Latitude
+                                    </h4>
+                                </div>
+                            </div>
+                            <div id="divFile">
+                                @if (Model.VerifiedFiles.Count > 0)
+                                {
+                                    <div class="row mt">
+                                        <div class="col-md-12">
+                                            <h3>Files</h3>
+                                            <hr />
+                                        </div>
+                                    </div>
+                                    @foreach (var file in Model.VerifiedFiles)
+                                    {
+                                        if (file.IsValid && file.Hash == null)
+                                        {
+                                            <div class="row" style="border:1px solid">
+                                                <div class="col-md-12 tim-typo">
+                                                    <p class="text-success">
+                                                        <span class="tim-note">File name :</span> @file.FileName<br />
+                                                        <span>Verification Successful. This is the original file</span><br />
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        }
+                                        else if (file.Hash == null)
+                                        {
+                                            <div class="row">
+                                                <div class="col-md-12 tim-typo">
+                                                    <p class="text-danger">
+                                                        <span class="tim-note">File name :</span> @file.FileName<br />
+                                                        <span>This file has been tampered with. It is not the original file</span><br />
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="row">
+                                                <div class="col-md-12 tim-typo">
+                                                    <p class="text-black">
+                                                        <span class="tim-note">File name :</span> @file.FileName<br />
+                                                        <span class="tim-note">Hash : </span>@file.Hash<br />
+                                                    </p>
+                                                </div>
+                                            </div>
+
+
+                                        }
+                                    }
+                                }
+                            </div>
+
+                        </div>
+
+                    </form>
+
+                    <!-- end content-->
+                </div>
+                <!--  end card  -->
+            </div>
+            <!-- end col-md-12 -->
+        </div>
+        <!-- end row -->
+    </div>
+</div>
+@section scripts
+{
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#btnVerify").click(function () {
+                $("#divFile").html('')
+            });
+        })
+
+    </script>
+}

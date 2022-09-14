@@ -1,0 +1,100 @@
+@model CitationViolationListItem
+@{
+    var globalViewData = (GlobalViewDataModel)ViewData[ViewDataKey.GlobalViewData];
+    var loggedInUser = (LoggedInUser)ViewData[ViewDataKey.LoggedInUser];
+}
+<form asp-route-controller="Citations" asp-route-action="SaveComment" method="post" role="form" asp-antiforgery="true" class="with-ajax">
+    <div>
+        @Html.HiddenFor(m => m.CommentID, new { id = "hdnCommentId" })
+    </div>
+    <div class="col-sm-10">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group label-floating">
+                    <label asp-for="Comment" class="control-label"></label>
+                    <input id="txtComment" asp-for="Comment" type="text" class="form-control">
+                    <span asp-validation-for="Comment" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group col-md-2 togglebutton">
+                <label>
+                    @*<input type="checkbox" name="IsPublic" id="chkIsPublic" value="@Model.IsPublic" class="permission-checkbox permissionbox " />
+                    public*@
+                </label>
+            </div>
+            <div class="col-md-4">
+                <button type="button" id="btnAddComment" citationId="@Model.Id" class="btn btn-fill btn-rose">Add Comment<div class="ripple-container"></div></button>
+                <button style="display:none" type="button" id="btnCancelComment" class="btn btn-fill btn-rose">Cancel<div class="ripple-container"></div></button>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div class="col-md-12">
+    <div class="card">
+        <div class="card-content">
+            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+
+                @if (loggedInUser.Permission != SystemPermissions.None)
+                {
+
+                    @foreach (var CitationComment in Model.CitationComments.OrderByDescending(m => m.CreatedDate))
+                    {
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="headingOne">
+                                <a role="button" data-parent="#accordion" href="#" aria-expanded="false" aria-controls="collapseTwo">
+                                    <h4 class="panel-title">
+                                        @CitationComment.CreatedBy added a comment - @CitationComment.CreatedDate.Humanize()
+                                        <i class="material-icons" style="float:left">keyboard_arrow_down</i>
+                                    </h4>
+                                </a>
+                            </div>
+                            <div id="@CitationComment.CommentID" aria-labelledby="headingOne">
+                                <div class="panel-body">
+                                    @CitationComment.Comment
+                                    @if (CitationComment.CreatedById == loggedInUser.Id)
+                                    {
+                                        <br />
+                                        <a href="javascript:void(0)" citationId="@Model.Id" CommentID="@CitationComment.CommentID" class="blue-link editComment">Edit</a>
+                                        <a href="javascript:void(0)" citationId="@Model.Id" CommentID="@CitationComment.CommentID" class="blue-link DeleteComment">Delete</a>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+
+                    @foreach (var CitationComment in Model.CitationComments.Where(x=>x.IsPublic==true).OrderByDescending(m => m.CreatedDate))
+                    {
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="headingOne">
+                                <a role="button" data-parent="#accordion" href="#" aria-expanded="false" aria-controls="collapseTwo">
+                                    <h4 class="panel-title">
+                                        @CitationComment.CreatedBy added a comment - @CitationComment.CreatedDate.Humanize()
+                                        <i class="material-icons" style="float:left">keyboard_arrow_down</i>
+                                    </h4>
+                                </a>
+                            </div>
+                            <div id="@CitationComment.CommentID" aria-labelledby="headingOne">
+                                <div class="panel-body">
+                                    @CitationComment.Comment
+                                    @if (CitationComment.CreatedById == loggedInUser.Id)
+                                    {
+                                        <br />
+                                        <a href="javascript:void(0)" citationId="@Model.Id" CommentID="@CitationComment.CommentID" class="blue-link editComment">Edit</a>
+                                        <a href="javascript:void(0)" citationId="@Model.Id" CommentID="@CitationComment.CommentID" class="blue-link DeleteComment">Delete</a>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+
+                }
+
+            </div>
+        </div>
+    </div>
+</div>

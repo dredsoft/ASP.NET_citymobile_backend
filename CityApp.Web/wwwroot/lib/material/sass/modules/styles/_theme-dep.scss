@@ -1,0 +1,62 @@
+// Opacity for text, icons, and dividers
+
+.light-theme {
+    .primary-text-color {
+        color: rgba(0, 0, 0, 0.87);
+    }
+    .icon-color, i, .secondary-text-color {
+        color: rgba(0, 0, 0, 0.54);
+    }
+    .disabled-color, .hint-text-color {
+        color: rgba(0, 0, 0, 0.26);
+    }
+    .divider-color {
+        background-color: rgba(0, 0, 0, 0.12);
+    }
+}
+
+.dark-theme {
+    .icon-color, i, .primary-text-color {
+        color: rgba(255, 255, 255, 1);
+    }
+    .secondary-text-color {
+        color: rgba(255, 255, 255, 0.7);
+    }
+    .disabled-color, .hint-text-color {
+        color: rgba(255, 255, 255, 0.3);
+    }
+    .divider-color {
+        background-color: rgba(255, 255, 255, 0.12);
+    }
+}
+
+// Surface colors
+
+.light-theme {
+    background-color: #FAFAFA;
+    #status-bar {
+        background-color: #E0E0E0;
+    }
+    #bottom-bar{
+        background-color: #212121;
+    }
+    #app-bar-wrapper, #app-bar-main, .app-bar-extension, .toolbar {
+        background-color: #F5F5F5;
+    }
+    .paper, .card, .tile, .dialog {
+        background-color: #FFFFFF;
+    }
+}
+
+.dark-theme {
+    background-color: #303030;
+    #status-bar, #bottom-bar {
+        background-color: #000000;
+    }
+    #app-bar-wrapper, #app-bar-main, .app-bar-extension, .toolbar {
+        background-color: #212121;
+    }
+    .paper, .card, .tile, .dialog {
+        background-color: #424242;
+    }
+}

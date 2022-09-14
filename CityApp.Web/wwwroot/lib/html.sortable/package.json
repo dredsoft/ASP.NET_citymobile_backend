@@ -1,0 +1,50 @@
+{
+  "name": "html5sortable",
+  "main": "dist/html.sortable.js",
+  "version": "0.6.3",
+  "license": "MIT",
+  "description": "VanillaJS sortable lists and grids using native HTML5 drag and drop API.",
+  "author": {
+    "name": "Lukas Oppermann",
+    "email": "lukas@vea.re",
+    "url": "http://vea.re"
+  },
+  "keywords": [
+    "sortable",
+    "html5",
+    "drag and drop"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/lukasoppermann/html5sortable"
+  },
+  "bugs": {
+    "url": "http://github.com/lukasoppermann/html5sortable/issues"
+  },
+  "devDependencies": {
+    "chai": "^3.0.0",
+    "coveralls": "^2.13.1",
+    "gulp": "^3.8.11",
+    "gulp-rename": "^1.2.2",
+    "gulp-sourcemaps": "^1.12.0",
+    "gulp-strip-code": "^0.1.2",
+    "gulp-uglify": "^3.0.0",
+    "gulp-umd": "^0.2.1",
+    "istanbul": "0.4.x",
+    "jsdom": "10.*",
+    "mocha": "^3.4.2",
+    "nyc": "^11.0.0",
+    "pump": "^1.0.2",
+    "requirejs": "^2.3.*",
+    "snazzy": "^6.0.0",
+    "standard": "^10.0.*",
+    "standard-readme": "^2.0.2"
+  },
+  "scripts": {
+    "test": "mocha test/umd/module.js && mocha test/*.js && npm run standard && npm run standard-test && standard-readme",
+    "standard": "standard 'src/*.js' | snazzy",
+    "standard-test": "standard 'test/**/*.js' | snazzy",
+    "travis": "npm run cover && mocha test/umd/module.js && npm run standard",
+    "cover": "nyc mocha && nyc report --reporter=text-lcov | coveralls"
+  }
+}

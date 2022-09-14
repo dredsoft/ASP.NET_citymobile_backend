@@ -1,0 +1,71 @@
+@model CitationViolationListItem
+@{
+    var globalViewData = (GlobalViewDataModel)ViewData[ViewDataKey.GlobalViewData];
+    var odd = true;
+    var date = DateTime.UtcNow;
+
+
+}
+<div id="timeline">
+
+
+    @foreach (var AuditLog in Model.CitationAuditLog.OrderByDescending(m => m.CreatedDate))
+    {
+
+
+
+        <div class="row timeline-movement">
+
+            @if (date != AuditLog.CreatedDate.Date)
+            {
+                date = AuditLog.CreatedDate.Date;
+                <div class="timeline-badge hidden-xs">
+                    <span class="timeline-balloon-date-day">@AuditLog.CreatedDate.Day</span><br />
+                    <span class="timeline-balloon-date-month">@Convert.ToDateTime(AuditLog.CreatedDate).ToString("MMM").ToUpper()</span>
+                </div>
+            }
+            else
+            {
+                date = AuditLog.CreatedDate.Date;
+            }
+            @if (odd == true)
+                {
+                <div class="col-sm-offset-6 col-sm-6  timeline-item">
+                    <div class="row">
+                        <div class="col-sm-offset-1 col-sm-11">
+                            <div class="timeline-panel debits">
+                                <ul class="timeline-panel-ul">
+                                    <li><span class="importo">@AuditLog.Events</span></li>
+                                    <li><span class="causale">@AuditLog.Comment </span> </li>
+                                    <li><p><small class="text-muted"><i class="glyphicon glyphicon-time"></i> @AuditLog.CreatedDate.UTCToAccountLocalTime(globalViewData.TimeZone).ToString("MM/dd/yyyy HH:mm tt")</small> by <i>@AuditLog.CreateUser</i></p> </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                odd = false;
+            }
+            else
+            {
+                <div class="col-sm-6  timeline-item">
+                    <div class="row">
+                        <div class="col-sm-11">
+                            <div class="timeline-panel credits">
+                                <ul class="timeline-panel-ul">
+                                    <li><span class="importo">@AuditLog.Events</span></li>
+                                    <li><span class="causale">@AuditLog.Comment </span> </li>
+                                    <li><p><small class="text-muted"><i class="glyphicon glyphicon-time"></i> @AuditLog.CreatedDate.UTCToAccountLocalTime(globalViewData.TimeZone).ToString("MM/dd/yyyy H:mm tt")</small> by <i>@AuditLog.CreateUser</i></p> </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                odd = true;
+            }
+        </div>
+
+
+
+
+    }
+</div>

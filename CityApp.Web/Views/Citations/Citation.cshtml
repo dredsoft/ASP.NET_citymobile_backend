@@ -1,0 +1,672 @@
+@inject Microsoft.Extensions.Options.IOptions<AppSettings> AppSettings
+
+@model CitationViolationListItem
+@{
+    ViewData["Title"] = "Ticket Review";
+    var globalViewData = (GlobalViewDataModel)ViewData[ViewDataKey.GlobalViewData];
+    var googleAppKey = AppSettings.Value.GoogleMapsAPIKey;
+    var citationEditor = globalViewData.Permissions.Value.HasFlag(AccountPermissions.CitationEdit);
+    var loggedInUser = (LoggedInUser)ViewData[ViewDataKey.LoggedInUser];
+    var images = Model.CitationAttachment.Where(m => m.AttachmentType == CitationAttachmentType.Image).OrderBy(m => m.CreatedDate);
+
+    //This is only for testing purposes
+    var isContested = Model.StatusId == CitationStatus.Contested;
+
+}
+
+@section styles
+{
+    <environment names="@EnvironmentNames.DEVELOPMENT">
+        <link href="~/css/Citation.css" rel="stylesheet" asp-append-version="true" />
+    </environment>
+
+
+    <environment names="@EnvironmentNames.NOT_DEVELOPMENT">
+        <link href="~/css/Citation.min.css" rel="stylesheet" asp-append-version="true" />
+    </environment>
+}
+
+
+<div class="container-fluid">
+    <form asp-antiforgery="true" asp-route="account" asp-route-controller="citations" asp-route-action="citation" asp-route-id="@Model.Id"  asp-route-accountNum="@globalViewData.AccountNumber">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header card-header-icon" data-background-color="green">
+                        <i class="material-icons">content_paste</i>
+                    </div>
+                    <div class="card-content">
+                        <div class="clearfix">
+                            <h3 class="card-title pull-left">Ticket <i>@Model.CitationNumber</i>  @if (isContested) {<span class="text-danger ml"> <i class="material-icons">assignment_late</i> Contested</span> }</h3>
+                            @if (citationEditor && loggedInUser.Permission != SystemPermissions.None)
+                            {
+                                <a class="pull-right" asp-route="account" asp-route-controller="citations" asp-route-action="citation" asp-route-id="@Model.Id" , asp-route-accountNum="@globalViewData.AccountNumber" asp-route-e="true">edit</a>
+                            }
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-md-7">
+                                @if (!String.IsNullOrEmpty(@Model.VideoUrl))
+                                {
+                                    <div id="video-container">
+                                        <video width="100%" id="citationVideo" height="300" controls>
+                                            <source src="@Model.VideoUrl" type="video/mp4" id="videoSrc">
+                                            Your browser does not support HTML5 video.
+                                        </video>
+                                        @if (citationEditor && loggedInUser.Permission != SystemPermissions.None)
+                                        {
+
+                                            <div id="video-controls">
+                                                <button type="button" id="btnSaveImage" citationId="@Model.Id" VideoAttachmentId="@Model.VideoAttachmentId">Save image from video<div class="ripple-container"></div></button> <i>Create an image from any screen of the video.</i>
+                                            </div>
+                                        }
+
+                                    </div>
+
+                                    <div class="row">
+
+                                    </div>
+
+                                    @foreach (var image in images)
+                                    {
+                                        <div class="col-xs-3">
+                                            <a href="@Html.Raw(CityApp.Common.Utilities.AWSHelper.GetS3Url(image.Key,AppSettings.Value.AmazonS3Url))" target="_blank"><img src="@Html.Raw(CityApp.Common.Utilities.AWSHelper.GetS3Url(image.Key,AppSettings.Value.AmazonS3Url))" class="img-responsive" /></a>
+                                            <span class="txtsmall">@image.CreatedDate.UTCToAccountLocalTime(globalViewData.TimeZone).ToString("MM/dd/yyyy hh:mm tt")</span>
+                                            @if (!image.FileName.Contains("_thumb.png"))
+                                            {
+                                                <a href="javascript:;void()" attachmentId="@image.AttachmentId" class="btn btn-simple btn-info btn-icon like clsDeleteAttachment" style="padding-left:4px;"><i class="material-icons">delete_forever</i></a>
+                                            }
+                                        </div>
+                                    }
+
+                                }
+                                else if (!String.IsNullOrEmpty(@Model.ImageUrl))
+                                {
+                                    <img src="@Model.ImageUrl" class="img-responsive citation-image" style="max-height:300px; width:auto" />
+                                }
+                                else
+                                {
+                                    <div style="height: 200px;
+                                    width: 100%;
+                                    text-align: center;
+                                    vertical-align: middle;
+                                    line-height: 190px;
+                                    border-style: solid;
+                                    border-radius: 10px;
+                                    border-width: thin;
+                                    border-color: gray;
+                                    background-color: lightgrey;">
+                                        <span>No media available</span>
+                                    </div>
+                                }
+
+                            </div>
+                            <div class="col-xs-12 col-md-5 text-right">
+                                <div class="row">
+                                    @if (Model.IsEdit)
+                                    {
+                                        <div class="col-sm-6 pull-right text-right">
+                                            <h4 class="card-title">
+                                                <small>Captured on </small><br />
+
+                                                <input asp-for="DisplayDate" class="form-control datetimepicker" placeholder="Created From">
+                                            </h4>
+                                        </div>
+                                        <div class="col-sm-12 text-right ">
+                                            <h4 class="card-title clscapturedby"><small>Captured by </small><br /><a style="color:#337ab7" asp-action="Edit" asp-route-Id="@Model.CreatedByID" asp-controller="AccountSettings"> @Model.CreatedBy </a><span class="snd-message btn-tooltip" id="sndMessage" displayName="@Model.CreatedBy" email="@Model.CreatedUserEmail" title="Send Message"><i class="material-icons">message</i></span></h4>
+                                        </div>
+
+
+                                    }
+                                    else
+                                    {
+                                        <div class="col-sm-12 text-right">
+                                            <h4 class="card-title"><small>Captured on </small><br />@Model.Date.UTCToAccountLocalTime(globalViewData.TimeZone)</h4>
+                                        </div>
+                                        <div class="col-sm-12 text-right ">
+                                            <h4 class="card-title clscapturedby"><small>Captured by </small><br />@Model.CreatedBy<span class="snd-message btn-tooltip" id="sndMessage" displayName="@Model.CreatedBy" email="@Model.CreatedUserEmail" title="Send Message"><i class="material-icons">message</i></span></h4>
+                                        </div>
+                                    }
+
+
+                                    <div class="col-sm-12 text-right">
+                                        <h4 class="card-title"><small>Location </small><br />@Model.LocationDescription</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+
+                        <div class="price">
+                            <strong>Status: </strong>
+                            <div id="divStatus">
+                                @if (citationEditor && loggedInUser.Permission != SystemPermissions.None)
+                                {
+
+                                    @if (Model.StatusId.HasFlag(CitationStatus.Closed) || Model.StatusId.HasFlag(CitationStatus.Rejected))
+                                    {
+                                        <label class="">@Model.StatusId</label>
+                                    }
+                                    else
+                                    {
+                                        <select asp-for="StatusId" asp-items="Html.GetEnumSelectList<CitationStatus>()" id="ddlStatus" citationId="@Model.Id" class="form-control ">
+                                            <option value="0">Status</option>
+                                        </select>
+                                    }
+                                }
+                                else
+                                {
+                                    <label class="">@Model.StatusId</label>
+
+                                }
+                            </div>
+                        </div>
+
+                        <div class="pull-right">
+                            @if (citationEditor && loggedInUser.Permission != SystemPermissions.None)
+                            {
+                                <strong><i class="material-icons">account_circle</i> Assigned To: </strong>
+                                <select asp-for="AssignedToId" asp-items="Model.AssignedToList" id="ddlAssignedTo" citationId="@Model.Id" class="form-control">
+                                    <option value="0">Assigned To</option>
+                                </select>
+                                <a href="#" id="lnkUnassign" title="Unassign user"><i class="material-icons text-danger">clear</i></a>
+                            }
+                            else
+                            {
+                                @if (Model.AssignedToId != null)
+                                {
+                                    <strong><i class="material-icons">account_circle</i> Assigned To: </strong>
+                                    <label class="">@Model.AssignedTo</label>
+                                }
+                            }
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div>
+            @Html.HiddenFor(m => m.Id)
+        </div>
+        @if (Model.IsEdit && citationEditor)
+        {
+            <div class="card">
+                <div class="card-content clearfix">
+                    <h4 class="pull-left">Edit Violation and Vehicle Details</h4>
+
+                    <a asp-action="Citation" asp-controller="Citations" asp-route-accountNum="@globalViewData.AccountNumber" asp-route-id="@Model.Id" class="pull-right btn btn-default">  Cancel</a>
+                    <button type="submit" class="btn btn-fill btn-primary pull-right">Save</button>                    
+                </div>
+            </div>
+        }
+        <div class="row">
+            @{
+                var violationSectionClass = "col-xs-12 col-md-6";
+                if (!Model.ViolationCustomRequiredFields.HasFlag(ViolationRequiredFields.VehicleInformation))
+                {
+                    violationSectionClass = "col-xs-12";
+                }
+            }
+            <div class="@violationSectionClass">
+                <div class="card">
+                    <div class="card-header card-header-icon" data-background-color="blue">
+                        <i class="material-icons">warning</i>
+                    </div>
+                    <div class="card-content">
+                        <div class="clearfix">
+                            <a name="#editViolation"></a>
+                            <h4 class="card-title pull-left">Violation Details</h4>
+                            @if (citationEditor && loggedInUser.Permission != SystemPermissions.None)
+                            {
+                                <a class="pull-right" asp-route="account" asp-route-controller="citations" asp-route-action="citation" asp-route-id="@Model.Id" , asp-route-accountNum="@globalViewData.AccountNumber" asp-route-e="true">edit</a>
+                            }
+                        </div>
+                        <table class="table table-full-width table-striped">
+                            @if (Model.IsEdit)
+    {
+                        <tr>
+                            <td><span class="metric-label">Violation</span></td>
+                            <td>
+
+                                <select asp-for="ViolationId" ViolaId="@Model.ViolationId" asp-items="Model.ViolationList" class="form-control">
+                                    <option value="00000000-0000-0000-0000-000000000000">Violation</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><span class="metric-label">Fine Amount</span></td>
+                            <td>
+                                <div class="form-group label-floating">
+                                    <input asp-for="FineAmount" type="text" class="form-control">
+                                    <span asp-validation-for="FineAmount" class="text-danger"></span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><span class="metric-label">Description/Comments</span></td>
+                            <td>
+                                <div class="form-group label-floating">
+                                    <input asp-for="Description" type="text" class="form-control">
+                                    <span asp-validation-for="Description" class="text-danger"></span>
+                                </div>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><span class="metric-label">Location Details</span></td>
+                            <td>
+                                <div class="form-group label-floating">
+                                    <input asp-for="LocationDescription" type="text" class="form-control">
+                                    <span asp-validation-for="LocationDescription" class="text-danger"></span>
+                                </div>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><span class="metric-label"><label asp-for="ViolatorFirstName" ></label></span></td>
+                            <td>
+                                <div class="form-group label-floating">
+                                    <input asp-for="ViolatorFirstName" type="text" class="form-control">
+                                    <span asp-validation-for="ViolatorFirstName" class="text-danger"></span>
+                                </div>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><span class="metric-label"><label asp-for="ViolatorLastName" class="control-label"></label></span></td>
+                            <td>
+                                <div class="form-group label-floating">
+                                    <input asp-for="ViolatorLastName" type="text" class="form-control">
+                                    <span asp-validation-for="ViolatorLastName" class="text-danger"></span>
+                                </div>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><span class="metric-label"><label asp-for="ViolatorAddress1" class="control-label"></label></span></td>
+                            <td>
+                                <div class="form-group label-floating">
+                                    <input asp-for="ViolatorAddress1" type="text" class="form-control">
+                                    <span asp-validation-for="ViolatorAddress1" class="text-danger"></span>
+                                </div>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><span class="metric-label"><label asp-for="ViolatorAddress2" class="control-label"></label></span></td>
+                            <td>
+                                <div class="form-group label-floating">
+                                    <input asp-for="ViolatorAddress2" type="text" class="form-control">
+                                    <span asp-validation-for="ViolatorAddress2" class="text-danger"></span>
+                                </div>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><span class="metric-label"><label asp-for="ViolatorCity" class="control-label"></label></span></td>
+                            <td>
+                                <div class="form-group label-floating">
+                                    <input asp-for="ViolatorCity" type="text" class="form-control">
+                                    <span asp-validation-for="ViolatorCity" class="text-danger"></span>
+                                </div>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><span class="metric-label"><label asp-for="ViolatorState" class="control-label"></label></span></td>
+                            <td>
+                                <div class="form-group label-floating">
+                                    <input asp-for="ViolatorState" type="text" class="form-control">
+                                    <span asp-validation-for="ViolatorState" class="text-danger"></span>
+                                </div>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><span class="metric-label"><label asp-for="ViolatorZip" class="control-label"></label></span></td>
+                            <td>
+                                <div class="form-group label-floating">
+                                    <input asp-for="ViolatorZip" type="text" class="form-control">
+                                    <span asp-validation-for="ViolatorZip" class="text-danger"></span>
+                                </div>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><span class="metric-label"><label asp-for="ViolatorCountry" class="control-label"></label></span></td>
+                            <td>
+                                <div class="form-group label-floating">
+                                    <input asp-for="ViolatorCountry" type="text" class="form-control">
+                                    <span asp-validation-for="ViolatorCountry" class="text-danger"></span>
+                                </div>
+
+                            </td>
+                        </tr>
+}
+else
+{
+                        <tr>
+                            <td><span class="metric-label">Code</span></td>
+                            <td><span class="metric-value">@Model.ViolationCode</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="metric-label">Violation</span></td>
+                            <td><span class="metric-value">@Model.DisplayName</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="metric-label">Fine Amount</span></td>
+                            <td><span class="metric-value">@Model.FineAmount</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="metric-label">Description/Comments</span></td>
+                            <td><span class="metric-value">@Model.Description</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="metric-label">Location Details</span></td>
+                            <td><span class="metric-value">@Model.LocationDescription</span></td>
+                        </tr>
+                        @*<tr>
+        <td><span class="metric-label">Action</span></td>
+        <td><span class="metric-value">@Model.DisplayActions</span></td>
+    </tr>*@
+}
+                        </table>
+                        <br /><br />
+                    </div>
+                    <!--  end card  -->
+                </div>
+            </div>
+            @if (Model.ViolationCustomRequiredFields.HasFlag(ViolationRequiredFields.VehicleInformation))
+            {
+                <div class="col-xs-12 col-md-6">
+                    <div class="card">
+                        <div class="card-header card-header-icon" data-background-color="blue">
+                            <i class="material-icons">directions_car</i>
+                        </div>
+                        <div class="card-content">
+                            <div class="clearfix">
+                                <h4 class="card-title pull-left">Vehicle Information</h4>
+                                @if (citationEditor && loggedInUser.Permission != SystemPermissions.None)
+                                {
+                                    <a class="pull-right" asp-route="account" asp-route-controller="citations" asp-route-action="citation" asp-route-id="@Model.Id" , asp-route-accountNum="@globalViewData.AccountNumber" asp-route-e="true">edit</a>
+                                }
+                            </div>
+                            <table class="table table-full-width table-striped">
+                                @if (Model.IsEdit)
+                                {
+                                    <tr>
+                                        <td><span class="metric-label">Plate</span></td>
+                                        <td>
+                                            <div class="form-group label-floating">
+                                                <input asp-for="LicensePlate" type="text" class="form-control">
+                                                <span asp-validation-for="LicensePlate" class="text-danger"></span>
+                                            </div>
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="metric-label">State</span></td>
+                                        <td>
+
+                                            <div class="form-group label-floating">
+                                                <select asp-for="LicenseState" asp-items="Model.States" id="ddlAssignedTo" citationId="@Model.Id" class="form-control">
+                                                    <option value="">States</option>
+                                                </select>
+                                            </div>
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="metric-label">Vin</span></td>
+                                        <td>
+                                            <div class="form-group label-floating">
+                                                <input asp-for="VinNumber" type="text" class="form-control">
+                                                <span asp-validation-for="VinNumber" class="text-danger"></span>
+                                            </div>
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="metric-label">Make</span></td>
+                                        <td>
+                                            <div class="form-group label-floating">
+                                                <input asp-for="VehicleMake" type="text" class="form-control">
+                                                <span asp-validation-for="VehicleMake" class="text-danger"></span>
+                                            </div>
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="metric-label">Model</span></td>
+                                        <td>
+
+                                            <div class="form-group label-floating">
+                                                <input asp-for="VehicleModel" type="text" class="form-control">
+                                                <span asp-validation-for="VehicleModel" class="text-danger"></span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="metric-label">Type</span></td>
+                                        <td>
+
+                                            <div class="form-group label-floating">
+                                                <input asp-for="VehicleType" type="text" class="form-control">
+                                                <span asp-validation-for="VehicleType" class="text-danger"></span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="metric-label">Color</span></td>
+                                        <td>
+                                            <div class="form-group label-floating">
+                                                <input asp-for="VehicleColor" type="text" class="form-control">
+                                                <span asp-validation-for="VehicleColor" class="text-danger"></span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td><span class="metric-label">Plate</span></td>
+                                        <td> <span class="metric-value">@Model.LicensePlate</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="metric-label">State</span></td>
+                                        <td><span class="metric-value">@Model.LicenseState</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="metric-label">Vin</span></td>
+                                        <td><span class="metric-value">@Model.VinNumber</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="metric-label">Make</span></td>
+                                        <td><span class="metric-value">@Model.VehicleMake</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="metric-label">Model</span></td>
+                                        <td><span class="metric-value">@Model.VehicleModel</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="metric-label">Type</span></td>
+                                        <td><span class="metric-value">@Model.VehicleType</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="metric-label">Color</span></td>
+                                        <td><span class="metric-value">@Model.VehicleColor</span></td>
+                                    </tr>
+                                }
+
+                            </table>
+                        </div>
+                        <!--  end card  -->
+                    </div>
+
+                </div>
+            }
+        </div>
+        @if (Model.IsEdit && citationEditor)
+        {
+            <div class="card">
+                <div class="card-content clearfix">
+                    <h4 class="pull-left">Edit Violation and Vehicle Details</h4>
+
+                    <button type="submit" class="btn btn-fill btn-primary pull-right">Save<div class="ripple-container"></div></button>
+                </div>
+            </div>
+        }
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header card-header-tabs" data-background-color="blue" style="float:left;">
+                        <div class="nav-tabs-navigation">
+                            <div class="nav-tabs-wrapper">
+                                <div>
+                                    <input type="hidden" value="@Model.UploadMessage" id="hdnUploadMessage" />
+                                </div>
+                                <ul class="nav nav-tabs" data-tabs="tabs">
+
+                                    <li class="@Html.ClassIfTrue(string.IsNullOrWhiteSpace(Model.UploadMessage),"active") ml">
+                                        <a href="#pill1" data-toggle="tab" aria-expanded="true">
+                                            <i class="material-icons">location_on</i>
+                                            Maps
+                                            <div class="ripple-container"></div>
+                                        </a>
+                                    </li>
+
+                                    <li class="ml">
+                                        <a href="#pill2" data-toggle="tab" aria-expanded="false">
+                                            <i class="material-icons">question_answer</i>
+                                            Comments
+                                        </a>
+                                    </li>
+
+                                    @if (loggedInUser.Permission != SystemPermissions.None)
+                                    {
+                                        <li class="ml @Html.ClassIfTrue(!string.IsNullOrWhiteSpace(Model.UploadMessage),"active")">
+                                            <a href="#pill3" data-toggle="tab" aria-expanded="true">
+                                                <i class="material-icons">perm_media</i>
+                                                Attachments
+                                            </a>
+                                        </li>
+                                        @*<li class="ml @Html.ClassIfTrue(!string.IsNullOrWhiteSpace(Model.UploadMessage),"active")">
+                                            <a href="#pill5" data-toggle="tab" aria-expanded="true">
+                                                <i class="material-icons">face</i>
+                                                Violator
+                                            </a>
+                                        </li>*@
+                                    }
+
+                                    @if (isContested)
+                                    {
+                                        <li class="ml">
+                                            <a href="#contestedTab" data-toggle="tab" aria-expanded="false">
+                                                <i class="material-icons">assignment_late</i>
+                                                Contested
+                                            </a>
+                                        </li>
+                                    }
+                                    <li class="ml">
+                                        <a href="#pill4" data-toggle="tab" aria-expanded="false">
+                                            <i class="material-icons">restore</i>
+                                            Audit Log
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-content" style="margin-top:45px;">
+                        <div class="tab-content">
+
+                            <div class="tab-pane @Html.ClassIfTrue(string.IsNullOrWhiteSpace(Model.UploadMessage),"active")" id="pill1">
+                                @Html.Partial("_Maps")
+                            </div>
+
+
+                            <div class="tab-pane" id="pill2">
+                                @Html.Partial("_Comments")
+                            </div>
+
+                            <div class="tab-pane @Html.ClassIfTrue(!string.IsNullOrWhiteSpace(Model.UploadMessage),"active")" id="pill3">
+                                @Html.Partial("_Attachments")
+                            </div>
+
+                            <div class="tab-pane" id="pill4">
+                                @Html.Partial("_History")
+                            </div>
+
+                            <div class="tab-pane" id="pill5">
+                                @Html.Partial("_Violator")
+                            </div>
+                            <div class="tab-pane" id="contestedTab">
+                                @Html.Partial("_Contest")
+                            </div>
+                        </div>
+
+                        <div class="clearfix">
+                            @if (citationEditor)
+                            {
+                                if (Model.EvidencePackageCreated.HasValue && !string.IsNullOrWhiteSpace(Model.EvidencePackageKey))
+                                {
+
+                                    <a href="@Html.Raw(CityApp.Common.Utilities.AWSHelper.GetS3Url(Model.EvidencePackageKey,AppSettings.Value.AmazonS3Url ))" target="_blank">Download Evidence Package</a>
+                                }
+                                else
+                                {
+                                    @*<button type="button" id="GetCitationZip" citationId="@Model.Id" citationNumber="@Model.CitationNumber" class="btn btn-fill pull-right">Create Evidence Pacakge<div class="ripple-container"></div></button>*@
+                                }
+
+                                <button type="button" id="btnDeleteCitation" citationId="@Model.Id" class="btn btn-fill btn-rose pull-right">Delete Citation<div class="ripple-container"></div></button>
+                            }
+                        </div>
+                    </div>
+                </div><!-- end content-->
+            </div><!--  end card  -->
+        </div><!-- end col-md-12 -->
+    </form>
+
+</div><!-- end row -->
+
+@section scripts
+{
+    <script async defer
+            src="@Html.Raw($"https://maps.googleapis.com/maps/api/js?key={googleAppKey}&libraries=visualization&callback=initMap")">
+    </script>
+
+    <script type="text/javascript">
+        objCitation = {
+            CitationUrl: '@Url.Action("UpdateCitationStatus", "Citations")',
+            AssignUrl: '@Url.Action("UpdateCitationAssignTo", "Citations")',
+            SaveCommentUrl: '@Url.Action("SaveComment", "Citations")',
+            EditCommentUrl: '@Url.Action("EditComment", "Citations")',
+            DeleteCommentUrl: '@Url.Action("DeleteComment", "Citations")',
+            GetCommentsUrl: '@Url.Action("GetCommentsByCitationId", "Citations")',
+            UnassignUrl:'@Url.Action("UnAssignUser", "Citations")',
+            varlat:  @Model.Latitude,
+            varlng: @Model.Longitude,
+            s3BucketUrl:'@AppSettings.Value.AmazonS3Url',
+            GetUrlByAttachment: '@Url.Action("GetUrlByAttachment", "Citations")',
+            DownloadAttachment: '@Url.Action("DownloadAttachment", "Citations")',
+            SendEvidencePackage: '@Url.Action("SendEvidencePackage", "Citations")',
+            DeleteAttachment: '@Url.Action("DeleteAttachment", "Citations")',
+            SaveVideoAttachment: '@Url.Action("SaveVideoAttachment", "Citations")',
+            DeleteCitationUrl: '@Url.Action("DeleteCitation", "Citations")',
+            GetCitationUrl: '@Url.Action("Index", "Citations")',
+            SendMessageUrl: '@Url.Action("SendMessage", "AccountSettings")',
+            citationNumber:@Model.CitationNumber,
+
+        };
+    </script>
+
+    <environment names="@EnvironmentNames.DEVELOPMENT">
+        <script src="~/js/citation/citation.js" asp-append-version="true"></script>
+    </environment>
+
+    <environment names="@EnvironmentNames.NOT_DEVELOPMENT">
+        <script src="~/js/citation/citation.min.js" asp-append-version="true"></script>
+    </environment>
+}

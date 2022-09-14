@@ -1,0 +1,84 @@
+@model CityApp.Web.Models.Vendors.VendorListViewModel
+@{
+    ViewData["Title"] = "Vendors";
+    Layout = "~/Views/Shared/_InternalLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header card-header-icon" data-background-color="green">
+                    <i class="material-icons">assignment_ind</i>
+                </div>
+
+                <div class="card-content clearfix">
+                    <h4 class="card-title pull-left">
+                        @ViewData["Title"]
+                        <div><small>Approved Vendors that belong to your orginazation.</small></div>
+
+                    </h4>
+                    <a asp-area="" asp-action="Create" asp-controller="Vendors" class="btn btn-info fltrght btn-addcl">
+                        <span class="btn-label">
+                            <i class="material-icons">add</i>
+                        </span>
+                        Create Vendor<div class="ripple-container"></div>
+                    </a>
+           
+                    <div class="material-datatables responsivetable">
+                        @if (Model.VendorList.Any())
+                        {
+                            <table id="datatables" class="table table-striped table-no-bordered table-hover" cellspacing="0" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            Name
+                                        </th>
+                                        <th>
+                                            Phone
+                                        </th>
+                                        <th>
+                                            Email
+                                        </th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    @foreach (var vendor in Model.VendorList)
+                                    {
+
+                                        <tr>
+                                            <td><a asp-controller="Vendors" style="color:#337ab7 !important" asp-action="Edit" asp-route-Id="@vendor.Id">@vendor.Name</a></td>
+                                            <td>@vendor.MobilePhone</td>
+                                            <td>@vendor.Email</td>
+
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        }
+                        else
+                        {
+                            <div class="text-center">
+                                <h2>You don't have any Vendors!</h2>
+                                <p>Towable or booting related citations can be auto-assigned to your approved vendors. </p>
+                                <a asp-area="" asp-action="Create" asp-controller="Vendors" class="btn btn-info">
+                                    <span class="btn-label">
+                                        <i class="material-icons">add</i>
+                                    </span>
+                                    Click here to get started<div class="ripple-container"></div>
+                                </a>
+                            </div>
+                        }
+                    </div>
+
+                </div>
+            </div>
+            <!-- end content-->
+
+        </div>
+        <!--  end card  -->
+    </div>
+    <!-- end col-md-12 -->
+</div>
+

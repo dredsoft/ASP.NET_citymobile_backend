@@ -1,0 +1,56 @@
+﻿@model FindTicketViewModel
+@{ 
+    Layout = "_PayCitationLayout";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xs-12">
+            <div asp-validation-summary="ModelOnly"></div>
+        </div>
+    </div>
+    <form  asp-antiforgery="true" asp-route-controller="Ticket" asp-route-action="Find" >
+        <div class="row">
+            <div class="col-xs-4 form-group-lg">
+                <label asp-for="AccountNumber" class="control-label"></label>
+                <input asp-for="AccountNumber" class="form-control" />
+                <span asp-validation-for="AccountNumber" class="text-danger"></span>
+            </div>
+            <div class="col-xs-1">
+                <span class="h3">-</span>
+            </div>
+            <div class="col-xs-4 form-group-lg">
+                <label asp-for="CitationNumber" class="control-label"></label>
+                <input asp-for="CitationNumber" class="form-control" />
+                <span asp-validation-for="CitationNumber" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-4 form-group-lg">
+                <label asp-for="State" class="control-label"></label>
+                <input asp-for="State" class="form-control" />
+                <span asp-validation-for="State" class="text-danger"></span>
+            </div>
+            <div class="col-xs-1">
+                <span class="h3">-</span>
+            </div>
+            <div class="col-xs-4">
+                <label asp-for="LicensePlate" class="control-label"></label>
+                <input asp-for="LicensePlate" class="form-control" />
+                <span asp-validation-for="LicensePlate" class="text-danger"></span>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-success">Find my ticket</button>
+    </form>
+
+</div>
+@section scripts
+{
+    <environment names="@EnvironmentNames.DEVELOPMENT">
+    </environment>
+
+    <environment names="@EnvironmentNames.NOT_DEVELOPMENT">
+    </environment>
+
+
+}

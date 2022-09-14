@@ -1,0 +1,334 @@
+﻿@model AccountViolationViewModel
+@{
+    ViewData["Title"] = "Edit Violation";
+    var loggedInUser = (LoggedInUser)ViewData[ViewDataKey.LoggedInUser];
+}
+
+<style>
+    ul {
+        list-style-type: none;
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header card-header-icon" data-background-color="green">
+                    Edit Violation
+                </div>
+
+                <div class="card-content ">
+                    <div class="mrgnTop50">
+                        <ul class="nav nav-tabs" data-tabs="tabs" data-background-color="blue">
+                            <li class="active violationTab"><a href="#generalInfo" data-toggle="tab">General Information</a></li>
+                            <li class="violationTab"><a href="#requiredFields" data-toggle="tab">Required Fields</a></li>
+                            <li class="" id="hrfQuestion"><a href="#additionalQuestions" data-toggle="tab">Additional Questions</a></li>
+                        </ul>
+                    </div>
+
+                    <form method="post" role="form" asp-antiforgery="true" class="with-ajax">
+
+                        <div>
+                            @Html.HiddenFor(m => m.Id)
+                        </div>
+                        <div class="row mrgnTop10">
+                            <div class="col-sm-12">
+                                <div asp-validation-summary="ModelOnly"></div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="generalInfo">
+                                    <div class="col-xs-6">
+                                        <div class="row">
+                                            <div class="col-xs-12">
+                                                <h4>Violation Name and Desciption</h4>
+                                                <hr />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group label-floating">
+                                                    <label asp-for="Name" class="control-label"></label>
+                                                    <p>@Model.Name</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group label-floating">
+                                                    <label asp-for="CustomName" class="control-label"></label>
+                                                    <input asp-for="CustomName" type="text" class="form-control">
+                                                    <span><small><i>* Custom Name can be used to overwrite the recommended name</i></small></span><br />
+                                                    <span asp-validation-for="CustomName" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group label-floating">
+                                                    <label asp-for="Description" class="control-label"></label>
+                                                    <p>@Model.Description</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group label-floating">
+                                                    <label asp-for="CustomDescription" class="control-label"></label>
+                                                    <textarea asp-for="CustomDescription" class="form-control"></textarea>
+                                                    <span><small><i>* Custom Description can be used to overwrite the recommended description</i></small></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group label-floating">
+                                                    <label asp-for="HelpUrl" class="control-label"></label>
+                                                    <p>@Model.HelpUrl</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group label-floating">
+                                                    <label asp-for="CustomHelpUrl" class="control-label"></label>
+                                                    <input asp-for="CustomHelpUrl" type="text" class="form-control">
+                                                    <span asp-validation-for="CustomHelpUrl" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group label-floating">
+                                                    <label asp-for="Code" class="control-label"></label>
+                                                    <input asp-for="Code" type="text" class="form-control">
+                                                    <span asp-validation-for="Code" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group label-floating">
+                                                    <label asp-for="Fee" class="control-label"></label>
+                                                    <input asp-for="Fee" type="text" class="form-control">
+                                                    <span asp-validation-for="Fee" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                              
+                                    <div class="col-xs-6">
+                                        <div class="row">
+                                            <div class="col-xs-12">
+                                                <h4>Reminder Settings <small><br />Send follow up reminder to perform additional tasks</small></h4>
+                                                <hr />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <div class="form-group label-floating">
+                                                    <label asp-for="ReminderMinutes" class="control-label"></label>
+                                                    <input asp-for="ReminderMinutes" class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <div class="form-group label-floating">
+                                                    <label asp-for="ReminderMessage" class="control-label"></label>
+                                                    <input asp-for="ReminderMessage" class="form-control" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mt hidden">
+                                            <div class="col-xs-12">
+                                                <h4>Vendor Actions</h4>
+                                                <hr />
+                                            </div>
+                                        </div>
+                                        <div class="row hidden">
+
+                                            @foreach (ViolationActions action in Enum.GetValues(typeof(ViolationActions)))
+                                            {
+                                                if (Model.CustomActions.HasFlag(action))
+                                                {
+                                                    <div class="form-group col-sm-3 togglebutton">
+                                                        <label>
+                                                            <input type="checkbox" name="CustomActions" checked="checked" value="@action.ToString()" class="permission-checkbox permissionbox" />
+                                                            @action.GetName()
+                                                        </label>
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="form-group col-sm-3 togglebutton">
+                                                        <label>
+                                                            <input type="checkbox" name="CustomActions" value="@action.ToString()" class="permission-checkbox permissionbox" />
+                                                            @action.GetName()
+                                                        </label>
+                                                    </div>
+                                                }
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="tab-pane" id="requiredFields">
+                                    <div class="col-xs-6">
+                                        <div class="row">
+                                            @foreach (ViolationRequiredFields field in Enum.GetValues(typeof(ViolationRequiredFields)))
+                                            {
+                                                if (Model.CustomRequiredFields.HasFlag(field))
+                                                {
+                                                    <div class="form-group col-sm-5 togglebutton">
+                                                        <label>
+                                                            <input type="checkbox" name="CustomRequiredFields" checked="checked" value="@field.ToString()" class="permission-checkbox permissionbox" />
+                                                            @field.GetName()
+                                                        </label>
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="form-group col-sm-5 togglebutton">
+                                                        <label>
+                                                            <input type="checkbox" name="CustomRequiredFields" value="@field.ToString()" class="permission-checkbox permissionbox" />
+                                                            @field.GetName()
+                                                        </label>
+                                                    </div>
+                                                }
+                                            }
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="tab-pane" id="additionalQuestions">
+                                    <div class="col-sm-12">
+                                        @Html.HiddenFor(m => m.QuestionId, new { id = "hdnQuestionId" })
+
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div id="divQuestion" class="form-group is-focused label-floating ">
+                                                    <label asp-for="Question" id="lblQuestion" class="control-label">Add a Question</label>
+                                                    <input asp-for="Question" type="text" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group label-floating">
+                                                    <label asp-for="TypeName" class="control-label"></label>
+                                                    <select asp-for="TypeName" id="drpQuestionType" class="form-control">
+                                                        <option value="@ViolationQuestionType.TextField">@ViolationQuestionType.TextField.GetDescription()</option>
+                                                        <option value="@ViolationQuestionType.SingleChoiceField ">@ViolationQuestionType.SingleChoiceField.GetDescription() </option>
+                                                        <option value="@ViolationQuestionType.MultiChoiceField">@ViolationQuestionType.MultiChoiceField.GetDescription()</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="form-group col-md-2 togglebutton">
+                                                <label>
+                                                    <input type="checkbox" name="IsPublic" value="@Model.IsRequired" id="chkIsPublic" class="permission-checkbox permissionbox" />
+                                                    Required
+                                                </label>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <button type="button" id="btnAddQuestion" onclick="violation.AddQuestion(this)" violationId="@Model.Id" class="btn btn-fill btn-rose">Add a Question<div class="ripple-container"></div></button>
+                                                <button style="display:none" type="button" id="btnCancelQuestion" class="btn btn-fill btn-rose">Cancel<div class="ripple-container"></div></button>
+                                            </div>
+                                        </div>
+
+                                        <div id="divChoice" class="row" style="display:none">
+                                            <div class="col-md-6">
+                                                <div class="form-group label-floating">
+                                                    <label class="col-md-3 label-on-left">Choices</label>
+                                                    <input data-role="tagsinput" id="txtChoiceQuestion" type="text" class="form-control">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <div class="card">
+                                            <div class="card-content">
+
+                                                <div class=" col col-6" role="tablist" aria-multiselectable="true">
+                                                    <ul class="ml4 js-sortable sortable list flex flex-column list-reset" id="accordion">
+                                                        @foreach (var violationQuestion in Model.ViolationQuestion.OrderBy(m => m.Order))
+                                                        {
+                                                            <li class="p1 mb1 navy bg-yellow panel panel-default" style="position: relative; z-index: 10" questionID="@violationQuestion.QuestionID" order="@violationQuestion.Order">
+                                                                @violationQuestion.Question
+                                                                @if (violationQuestion.CreatedById == loggedInUser.Id)
+                                                                {
+                                                                    <br />
+                                                                    <a href="javascript:void(0)" violationId="@Model.Id" questionID="@violationQuestion.QuestionID" class="blue-link editQuestion">Edit</a>
+                                                                    <a href="javascript:void(0)" violationId="@Model.Id" questionID="@violationQuestion.QuestionID" class="blue-link DeleteQuestion">Delete</a>
+                                                                }
+                                                            </li>
+
+                                                        }
+
+
+                                                    </ul>
+                                                </div>
+
+
+
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+
+
+
+
+                                </div>
+
+
+
+                            </div>
+                        </div>
+                        <div class="row" id="btntoggle">
+                            <div class="col-md-6">
+                                <button type="submit" class="btn btn-fill btn-rose">Update<div class="ripple-container"></div></button>
+                                <a asp-controller="AccountSettings" asp-action="Cancel"> Cancel</a>
+                            </div>
+
+                        </div>
+
+                    </form>
+
+                    <!-- end content-->
+                </div>
+                <!--  end card  -->
+            </div>
+            <!-- end col-md-12 -->
+        </div>
+        <!-- end row -->
+    </div>
+</div>
+@section scripts
+{
+    <script type="text/javascript">
+        objViolation = {
+            SaveQuestionUrl: '@Url.Action("SaveQuestion", "AccountSettings")',
+            EditQuestionUrl: '@Url.Action("EditQuestion", "AccountSettings")',
+            GetQuestionsUrl: '@Url.Action("GetQuestionByViolationId", "AccountSettings")',
+            DeleteQuestionUrl: '@Url.Action("DeleteQuestion", "AccountSettings")',
+            SaveOrderUrl: '@Url.Action("SaveQuestionOrder", "AccountSettings")',
+
+    }
+    </script>
+
+    <environment names="@EnvironmentNames.DEVELOPMENT">
+        <script src="~/js/violation/EditViolation.js" asp-append-version="true"></script>
+        <script src="~/lib/html.sortable/src/html.sortable.js" asp-append-version="true"></script>
+
+    </environment>
+
+    <environment names="@EnvironmentNames.NOT_DEVELOPMENT">
+        <script src="~/js/violation/EditViolation.min.js" asp-append-version="true"></script>
+        <script src="~/lib/html.sortable/src/html.sortable.js" asp-append-version="true"></script>
+    </environment>
+}
+
+

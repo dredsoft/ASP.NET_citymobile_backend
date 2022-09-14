@@ -1,0 +1,38 @@
+.fab {
+    @extend .paper;
+    @extend .floating;
+    background-color: #fff;
+    text-align: center;
+    border-radius: 50%;
+    will-change: transform, background-color, color;
+    transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 1.75*$increment-keyline;
+    height: 1.75*$increment-keyline;
+    line-height: 1.75*$increment-keyline;
+    user-select: none;
+    cursor: pointer;
+    i {
+        line-height: 1.75*$increment-keyline;
+    }
+    &.mini {
+        width: 1.25*$increment-keyline;
+        height: 1.25*$increment-keyline;
+        line-height: 1.25*$increment-keyline;
+        i {
+            line-height: 1.25*$increment-keyline;
+        }
+    }
+    &.colored {
+        background-color: $brand-primary-accent;
+        i {
+            color: #fff;
+        }
+    }
+    &.pull-left {
+        right: auto;
+    }
+    &.pull-right {
+        left: auto;
+    }
+    &:hover {}
+}

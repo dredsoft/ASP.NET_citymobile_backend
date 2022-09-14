@@ -1,0 +1,51 @@
+﻿@model AdminAccountCategoryViewModel
+
+<form method="post" role="form" asp-antiforgery="true" class="with-ajax">
+    <div>
+        @Html.HiddenFor(m => m.Id)
+        @Html.HiddenFor(m => m.AccountId)
+    </div>
+    <div class="row mrgnTop30">
+        <div class="col-sm-12">
+            <div asp-validation-summary="ModelOnly"></div>
+        </div>
+    </div>
+    <div class="col-sm-10">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group label-floating">
+                    <select asp-for="TypeId" asp-items="Model.Types" class="form-control">
+                        <option value="">Select Type</option>
+                    </select>
+                    <span asp-validation-for="TypeId" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group label-floating">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input asp-for="Name" type="text" class="form-control">
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group label-floating">
+                    <label asp-for="Description" class="control-label"></label>
+                    <textarea asp-for="Description" class="form-control"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <button type="submit" class="btn btn-fill btn-rose">Save<div class="ripple-container"></div></button>
+                <a asp-controller="Categories" asp-action="Cancel"> Cancel</a>
+            </div>
+
+        </div>
+    </div>
+</form>

@@ -1,0 +1,145 @@
+@model CityApp.Web.Models.Vendors.VendorsViewModel
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_InternalLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header card-header-icon" data-background-color="green">
+                    Create Vendor
+                </div>
+                <div class="card-content">
+
+                    <form method="post" role="form" asp-antiforgery="true" class="with-ajax">
+
+                        <div class="row mrgnTop30">
+                            <div class="col-sm-12">
+                                <div asp-validation-summary="ModelOnly"></div>
+                            </div>
+                        </div>
+                        <div class="col-sm-10">
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <div class="form-group label-floating">
+                                        <label asp-for="Name" class="control-label"></label>
+                                        <input asp-for="Name" type="text" class="form-control">
+                                        <span asp-validation-for="Name" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="form-group label-floating">
+                                        <label asp-for="Email" class="control-label"></label>
+                                        <input asp-for="Email" type="text" class="form-control">
+                                        <span asp-validation-for="Email" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <div class="form-group label-floating">
+                                        <label asp-for="OfficePhone" class="control-label"></label>
+                                        <input asp-for="OfficePhone" type="text" class="form-control">
+                                        <span asp-validation-for="OfficePhone" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="form-group label-floating">
+                                        <label asp-for="MobilePhone" class="control-label"></label>
+                                        <input asp-for="MobilePhone" type="text" class="form-control">
+                                        <span asp-validation-for="MobilePhone" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <div class="form-group label-floating">
+                                        <label asp-for="Address1" class="control-label"></label>
+                                        <input asp-for="Address1" type="text" class="form-control">
+                                        <span asp-validation-for="Address1" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="form-group label-floating">
+                                        <label asp-for="Address2" class="control-label"></label>
+                                        <input asp-for="Address2" type="text" class="form-control">
+                                        <span asp-validation-for="Address2" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <div class="form-group label-floating">
+                                        <label asp-for="City" class="control-label"></label>
+                                        <input asp-for="City" type="text" class="form-control">
+                                        <span asp-validation-for="City" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="form-group label-floating">
+                                        <label asp-for="State" class="control-label"></label>
+                                        <input asp-for="State" type="text" class="form-control">
+                                        <span asp-validation-for="State" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <div class="form-group label-floating">
+                                        <label asp-for="Zip" class="control-label"></label>
+                                        <input asp-for="Zip" type="text" class="form-control">
+                                        <span asp-validation-for="Zip" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="form-group label-floating togglebutton">
+                                        <label>
+                                            <input type="checkbox" asp-for="Disabled"> Disabled
+                                        </label>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row mt">
+                                <div class="col-xs-12">
+                                    <strong>Actions</strong><br />
+                                </div>
+                            </div>
+                            <div class="row">
+                                @foreach (ViolationActions action in Enum.GetValues(typeof(ViolationActions)))
+                                {
+                                    <div class="form-group col-sm-3 togglebutton">
+                                        <label>
+                                            <input type="checkbox" name="Actions" value="@action.ToString()" class="permission-checkbox permissionbox" />
+                                            @action.GetName()
+                                        </label>
+                                    </div>
+                                }
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <button type="submit" class="btn btn-fill btn-rose">Save<div class="ripple-container"></div></button>
+
+                                    <a asp-controller="Vendors" asp-action="Index"> Cancel</a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+
+                    <!-- end content-->
+                </div>
+                <!--  end card  -->
+            </div>
+            <!-- end col-md-12 -->
+        </div>
+        <!-- end row -->
+    </div>
+</div>
+

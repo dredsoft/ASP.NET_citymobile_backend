@@ -1,0 +1,347 @@
+@model CitationsListViewModel
+@{
+    ViewData["Title"] = "Tickets";
+    Layout = "~/Views/Shared/_InternalLayout.cshtml";
+    var globalViewData = (GlobalViewDataModel)ViewData[ViewDataKey.GlobalViewData];
+
+}
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                @Html.Partial("_TabNavigation")
+                <div class="card-content clearfix" id="feature">
+                    <h4 class="card-title pull-left">
+                        @Model.Title
+                    </h4>
+                    <div class="toolbar cl-addbtn-outer">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <!-- Here you can write extra buttons/actions for the toolbar -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <form asp-action="Index" method="get" asp-controller="Citations">
+                        @Html.HiddenFor(m => m.ViolationTypeId)
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <input asp-for="CreatedFrom" class="form-control datepicker" placeholder="Created From">
+                            </div>
+                            <div class="col-sm-3">
+                                <input asp-for="CreatedTo" class="form-control datepicker" placeholder="Created To">
+                            </div>
+                            <div class="col-sm-3">
+                                <select asp-for="StatusId" asp-items="Html.GetEnumSelectList<CitationStatus>()" class="form-control">
+                                    <option>Status</option>
+                                </select>
+
+                            </div>
+                            <div class="col-sm-2">
+                                <select asp-for="AssignedToId" asp-items="Model.AssignedToList" id="ddlAssignedTo" class="form-control">
+                                    <option>Assigned To</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <input asp-for="PostalCode" class="form-control" placeholder="Postal Code">
+                            </div>
+                            <div class="col-sm-3">
+                                <input asp-for="Street" class="form-control" placeholder="Street">
+                            </div>
+                            <div class="col-sm-2">
+                                <select asp-for="ViolationId" asp-items="Model.Violations" class="form-control">
+                                    <option>Violation</option>
+                                </select>
+                            </div>
+
+                            @if (Model.IsVehicleRelatedType)
+                            {
+                                <div class="col-sm-3">
+                                    <input asp-for="LicensePlate" class="form-control" placeholder="License Plate" id="txtLicensePlate">
+                                </div>
+                            }
+                            <div class="col-sm-1" style="margin-top:9px;">
+                                <button type="submit" class="btn btn-primary btn-round btn-fab btn-fab-mini">
+                                    <i class="material-icons">search</i>
+                                    <div class="ripple-container"></div>
+                                </button>
+                            </div>
+                            <div class="col-sm-1" style="margin-top:9px;">
+                                <a href="javascript:void(0)" id="PrintPreview">
+                                    <i class="material-icons dp48">print</i>
+                                    <div class="caption">print</div>
+                                </a>
+                            </div>
+                            <div class="col-sm-1" style="margin-top:9px;">
+                                <a asp-action="CitationCsv"
+                                   asp-controller="Citations"
+                                   asp-route-sortDirection="@Model.OppositeSortDirection"
+                                   asp-route-sortOrder="@CityApp.Web.Models.Citations.CitationsListViewModel.DetailSortParam"
+                                   asp-route-CreatedFrom="@Model.CreatedFrom"
+                                   asp-route-Createdto="@Model.CreatedTo"
+                                   asp-route-StatusId="@Model.StatusId"
+                                   asp-route-LicensePlate="@Model.LicensePlate"
+                                   asp-route-ViolationId="@Model.ViolationId"
+                                   asp-route-PostalCode="@Model.PostalCode"
+                                   asp-route-Street="@Model.Street"
+                                   asp-route-AssignedToId="@Model.AssignedToId">
+                                    <i class="material-icons dp48">description</i>
+                                    <div class="caption">Csv</div>
+                                </a>
+                            </div>
+
+                        </div>
+                    </form>
+                    @*This Blank div is created for Print Preview record*@
+                    <div id="divContent" style="display:none" class="material-datatables responsivetable">
+                    </div>
+                    <div id="masterContent1" class="material-datatables responsivetable">
+                        <table id="datatables" class="table table-striped table-no-bordered table-hover" cellspacing="0" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <a asp-action="Index"
+                                           asp-route-sortDirection="@Model.OppositeSortDirection"
+                                           asp-route-sortOrder="@CityApp.Web.Models.Citations.CitationsListViewModel.DetailSortParam"
+                                           asp-route-CreatedFrom="@Model.CreatedFrom"
+                                           asp-route-Createdto="@Model.CreatedTo"
+                                           asp-route-StatusId="@Model.StatusId"
+                                           asp-route-LicensePlate="@Model.LicensePlate"
+                                           asp-route-ViolationTypeId="@Model.ViolationTypeId"
+                                           asp-route-PostalCode="@Model.PostalCode"
+                                           asp-route-Street="@Model.Street"
+                                           asp-route-AssignedToId="@Model.AssignedToId">Violation</a>
+                                    </th>
+                                    <th>
+                                        <a asp-action="Index"
+                                           asp-route-sortDirection="@Model.OppositeSortDirection"
+                                           asp-route-sortOrder="@CityApp.Web.Models.Citations.CitationsListViewModel.NumberSortParam"
+                                           asp-route-CreatedFrom="@Model.CreatedFrom"
+                                           asp-route-Createdto="@Model.CreatedTo"
+                                           asp-route-StatusId="@Model.StatusId"
+                                           asp-route-LicensePlate="@Model.LicensePlate"
+                                           asp-route-ViolationTypeId="@Model.ViolationTypeId"
+                                           asp-route-PostalCode="@Model.PostalCode"
+                                           asp-route-Street="@Model.Street"
+                                           asp-route-AssignedToId="@Model.AssignedToId">Ticket Number</a>
+                                    </th>
+                                    <th>
+                                        <a asp-action="Index"
+                                           asp-route-sortDirection="@Model.OppositeSortDirection"
+                                           asp-route-sortOrder="@CityApp.Web.Models.Citations.CitationsListViewModel.StatusSortParam"
+                                           asp-route-CreatedFrom="@Model.CreatedFrom"
+                                           asp-route-Createdto="@Model.CreatedTo"
+                                           asp-route-StatusId="@Model.StatusId"
+                                           asp-route-LicensePlate="@Model.LicensePlate"
+                                           asp-route-ViolationTypeId="@Model.ViolationTypeId"
+                                           asp-route-PostalCode="@Model.PostalCode"
+                                           asp-route-Street="@Model.Street"
+                                           asp-route-AssignedToId="@Model.AssignedToId">Status</a>
+                                    </th>
+                                    @if (Model.IsVehicleRelatedType)
+                                    {
+                                        <th>
+                                            <a asp-action="Index"
+                                               asp-route-sortDirection="@Model.OppositeSortDirection"
+                                               asp-route-sortOrder="@CityApp.Web.Models.Citations.CitationsListViewModel.LicenseSortParam"
+                                               asp-route-CreatedFrom="@Model.CreatedFrom"
+                                               asp-route-Createdto="@Model.CreatedTo"
+                                               asp-route-StatusId="@Model.StatusId"
+                                               asp-route-LicensePlate="@Model.LicensePlate"
+                                               asp-route-ViolationTypeId="@Model.ViolationTypeId"
+                                               asp-route-PostalCode="@Model.PostalCode"
+                                               asp-route-Street="@Model.Street"
+                                               asp-route-AssignedToId="@Model.AssignedToId">License</a>
+                                        </th>
+                                    }
+
+                                    <th>
+                                        <a asp-action="Index"
+                                           asp-route-sortDirection="@Model.OppositeSortDirection"
+                                           asp-route-sortOrder="@CityApp.Web.Models.Citations.CitationsListViewModel.AssignedToSortParam"
+                                           asp-route-CreatedFrom="@Model.CreatedFrom"
+                                           asp-route-Createdto="@Model.CreatedTo"
+                                           asp-route-StatusId="@Model.StatusId"
+                                           asp-route-LicensePlate="@Model.LicensePlate"
+                                           asp-route-ViolationTypeId="@Model.ViolationTypeId"
+                                           asp-route-PostalCode="@Model.PostalCode"
+                                           asp-route-Street="@Model.Street"
+                                           asp-route-AssignedToId="@Model.AssignedToId">Location</a>
+                                    </th>
+
+                                    <th>
+                                        <a asp-action="Index"
+                                           asp-route-sortDirection="@Model.OppositeSortDirection"
+                                           asp-route-sortOrder="@CityApp.Web.Models.Citations.CitationsListViewModel.AssignedToSortParam"
+                                           asp-route-CreatedFrom="@Model.CreatedFrom"
+                                           asp-route-Createdto="@Model.CreatedTo"
+                                           asp-route-StatusId="@Model.StatusId"
+                                           asp-route-LicensePlate="@Model.LicensePlate"
+                                           asp-route-ViolationTypeId="@Model.ViolationTypeId"
+                                           asp-route-PostalCode="@Model.PostalCode"
+                                           asp-route-Street="@Model.Street"
+                                           asp-route-AssignedToId="@Model.AssignedToId">Assigned to</a>
+                                    </th>
+                                    <th>
+                                        <a asp-action="Index"
+                                           asp-route-sortDirection="@Model.OppositeSortDirection"
+                                           asp-route-sortOrder="@CityApp.Web.Models.Citations.CitationsListViewModel.CreatedSortParam"
+                                           asp-route-CreatedFrom="@Model.CreatedFrom"
+                                           asp-route-Createdto="@Model.CreatedTo"
+                                           asp-route-StatusId="@Model.StatusId"
+                                           asp-route-LicensePlate="@Model.LicensePlate"
+                                           asp-route-ViolationTypeId="@Model.ViolationTypeId"
+                                           asp-route-PostalCode="@Model.PostalCode"
+                                           asp-route-Street="@Model.Street"
+                                           asp-route-AssignedToId="@Model.AssignedToId">Created</a>
+                                    </th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @foreach (var Citation in Model.CitationsListItem)
+                                {
+                                    <tr>
+                                        <td>
+                                            @if (Citation.Violation != null)
+                                            {
+                                                @Citation.Violation.Name  <br /><strong><small>@Citation.Violation.Code</small></strong>
+                                            }
+
+                                        </td>
+                                        <td>
+                                            <a asp-route="account" asp-route-controller="citations" asp-route-action="citation" asp-route-accountNum="@globalViewData.AccountNumber" asp-route-Id="@Citation.Id" class="blue-link">@Citation.CitationNumber</a>
+                                        </td>
+                                        <td>
+                                            @if (Citation.Status != 0)
+                                            {
+                                                @Citation.Status.GetEnumName();
+                                            }
+                                        </td>
+                                        @if (Model.IsVehicleRelatedType)
+                                        {
+                                            <td>
+                                                @Citation.LicensePlate
+                                            </td>
+                                        }
+                                        <td>
+                                            @Citation.Street, @Citation.Postalcode
+                                        </td>
+                                        <td>
+                                            @if (Citation.FirstName != null)
+                                            {
+                                                @Html.Raw($"{Citation.FirstName} {Citation.LastName}")
+                                            }
+                                            else
+                                            {
+                                                @Citation.Email
+                                            }
+                                        </td>
+                                        <td>
+                                            @Citation.CreatedHumanizerDate
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <a asp-action="HeatMaps"
+                               asp-route-CreatedFrom="@Model.CreatedFrom"
+                               asp-route-Createdto="@Model.CreatedTo"
+                               asp-route-StatusId="@Model.StatusId"
+                               asp-route-ViolationTypeId="@Model.ViolationTypeId"
+                               asp-route-ViolationId="@Model.ViolationId"
+                               asp-route-AssignedToId="@Model.AssignedToId"
+                               asp-route-LicensePlate="@Model.LicensePlate"
+                               asp-route-PostalCode="@Model.PostalCode"
+                               asp-route-Street="@Model.Street"
+                               class="pull-left" style="text-decoration:underline;"><i style="float:left" class="material-icons">map</i><div style="float:left">View as Heat Map</div></a>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="mt pull-right">
+                                <cs-pager cs-paging-info="@Model.Paging"
+                                          cs-paging-pagesize="@Model.Paging.ItemsPerPage"
+                                          cs-paging-pagenumber="@Model.Paging.CurrentPage"
+                                          cs-paging-totalitems="@Model.Paging.TotalItems"
+                                          cs-pagenumber-param="page"
+                                          cs-show-first-last="true"
+                                          cs-suppress-empty-nextprev="true"
+                                          cs-suppress-inactive-firstlast="true"
+                                          cs-first-page-text="First"
+                                          cs-last-page-text="Last"
+                                          cs-pager-li-current-class="active"
+                                          cs-pager-li-non-active-class="disabled"
+                                          cs-paging-maxpageritems="10"
+                                          cs-first-page-title=" First Page"
+                                          cs-last-page-title="Last Page"
+                                          cs-next-page-title=" Next page"
+                                          cs-pager-ul-class=" pagination"
+                                          cs-ajax-mode="replace"
+                                          cs-ajax-success-empty=" a callback"
+                                          cs-ajax-failure-empty=" a callback"
+                                          asp-route-sortDirection="@Model.SortDirection"
+                                          asp-route-sortOrder="@Model.SortOrder"
+                                          asp-route-CreatedFrom="@Model.CreatedFrom"
+                                          asp-route-Createdto="@Model.CreatedTo"
+                                          asp-route-StatusId="@Model.StatusId"
+                                          asp-route-AssignedToId="@Model.AssignedToId"
+                                          asp-route-ViolationTypeId="@Model.ViolationTypeId"
+                                          asp-route-LicensePlate="@Model.LicensePlate"
+                                          asp-route-PageSize="@Model.PageSize"
+                                          asp-controller="Citations"
+                                          asp-action="Index">
+
+                                </cs-pager>
+                            </div>
+                            @*<div class="clearfix">
+
+                                </div>*@
+                        </div>
+                        <div class="col-sm-6">
+                            <p class="mt pull-right">
+                                Total results: @Model.Paging.TotalItems
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <!-- end content-->
+            </div>
+            <!--  end card  -->
+        </div>
+        <!-- end col-md-12 -->
+    </div>
+    <!-- end row -->
+</div>
+
+@section scripts
+{
+
+    <environment names="@EnvironmentNames.DEVELOPMENT">
+        <script src="~/js/citation/Index.js" asp-append-version="true"></script>
+        <script src="~/js/printPreview.js" asp-append-version="true"></script>
+    </environment>
+
+    <environment names="@EnvironmentNames.NOT_DEVELOPMENT">
+        <script src="~/js/citation/Index.min.js" asp-append-version="true"></script>
+        <script src="~/js/printPreview.min.js" asp-append-version="true"></script>
+    </environment>
+
+
+    <script type="text/javascript">
+
+        objCitationIndex = {
+            PrintCitationUrl: '@Url.Action("CitationPrinting", "Citations")',
+        }
+
+        $(document).ready(function () {
+            demo.initFormExtendedDatetimepickers();
+        });
+
+    </script>
+}
+
+

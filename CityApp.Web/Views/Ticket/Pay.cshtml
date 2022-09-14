@@ -1,0 +1,60 @@
+﻿@inject Microsoft.Extensions.Options.IOptions<AppSettings> AppSettings
+
+@model TicketPaymentModel
+@{
+    ViewData["Title"] = "Ticket Review";
+    var stripePublishKey = AppSettings.Value.StripePublishableKey;
+    Layout = "_PayCitationLayout";
+
+
+}
+
+@section styles
+    {
+    <environment names="@EnvironmentNames.DEVELOPMENT">
+        <link href="~/css/Citation.css" rel="stylesheet" asp-append-version="true" />
+    </environment>
+
+
+    <environment names="@EnvironmentNames.NOT_DEVELOPMENT">
+        <link href="~/css/Citation.min.css" rel="stylesheet" asp-append-version="true" />
+    </environment>
+}
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="card">
+                <div class="card-header card-header-icon" data-background-color="green">
+                    <i class="material-icons">content_paste</i>
+                </div>
+                <div class="card-content">
+                    <div class="clearfix">
+                        <h3 class="card-title pull-left">Ticket <i>@Model.CitationId</i></h3>
+
+                    </div>
+                    <div>
+                        <form action="@Url.Action("Pay")" method="POST">
+                            @Html.HiddenFor(m => Model.CitationId)
+                            @Html.HiddenFor(m => Model.AccountId)
+                            @Html.HiddenFor(m => Model.AmountDue)
+                            <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                                    data-key="pk_test_0bJcEZ0S3qP4jj41EjcZfpzp"
+                                    data-amount="@Model.AmountDue"
+                                    data-name="GovAppSolutionCityApp"
+                                    data-description="Example charge"
+                                    data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+                                    data-locale="auto">
+                            </script>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div><!-- end row -->
+
+@section scripts
+{
+}

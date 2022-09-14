@@ -1,0 +1,26 @@
+﻿
+@inject Microsoft.AspNetCore.Hosting.IHostingEnvironment HostingEnvironment
+
+<environment names="@EnvironmentNames.DEVELOPMENT">
+
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/css/material-dashboard.min.css" rel="stylesheet" asp-append-version="true" />
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet" asp-append-version="true">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons" asp-append-version="true" />
+    <link href="~/lib/select2/dist/css/select2.min.css" asp-append-version="true" rel="stylesheet" />
+    <link href="~/lib/sweetalert2/dist/sweetalert2.css" asp-append-version="true" rel="stylesheet" />
+    <link href="~/css/site.css" rel="stylesheet" asp-append-version="true" />
+
+
+</environment>
+
+
+<environment names="@EnvironmentNames.NOT_DEVELOPMENT">
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/css/material-dashboard.min.css" rel="stylesheet" asp-append-version="true" />
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet" asp-append-version="true">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons" asp-append-version="true" />
+    <link href="~/lib/select2/dist/css/select2.min.css" asp-append-version="true" rel="stylesheet" />
+    <link href="~/lib/sweetalert2/dist/sweetalert2.min.css" asp-append-version="true" rel="stylesheet" />
+    <link href="~/css/site.min.css" rel="stylesheet" asp-append-version="true" />
+</environment>

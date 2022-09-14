@@ -1,0 +1,14 @@
+{
+  "name": "html.sortable",
+  "homepage": "https://github.com/voidberg/html5sortable",
+  "version": "0.6.3",
+  "_release": "0.6.3",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.6.3",
+    "commit": "09697196bb70c684af7f6d8c22f1bb3b0a39d968"
+  },
+  "_source": "https://github.com/voidberg/html5sortable.git",
+  "_target": "*",
+  "_originalSource": "html.sortable"
+}

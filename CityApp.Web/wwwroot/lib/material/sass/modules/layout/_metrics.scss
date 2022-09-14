@@ -1,0 +1,9 @@
+/*-- Metrics & keylines --*/
+$base-grid: 4px !default;
+
+$vertical-sizing: 2*$base-grid !default;
+$vertical-keyline: $base-grid !default;
+$horizontal-margin: 0 4*$base-grid !default;
+$content-padding: 4*$base-grid !default;
+$grid-gutter: $base-grid !default;
+$increment-keyline: 8*$base-grid !default;

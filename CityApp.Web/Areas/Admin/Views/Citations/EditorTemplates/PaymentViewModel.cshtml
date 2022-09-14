@@ -1,0 +1,85 @@
+@model PaymentViewModel
+
+<div>
+
+</div>
+<form method="post" role="form" asp-antiforgery="true" class="with-ajax">
+    @Html.HiddenFor(m => m.Id)
+    @Html.HiddenFor(m => m.CitationId)
+    @Html.HiddenFor(m => m.AccountId)
+    <div class="row mrgnTop30">
+        <div class="col-sm-12">
+            <div asp-validation-summary="ModelOnly"></div>
+        </div>
+    </div>
+    <div class="col-sm-10">
+        <div class="row">
+            <div class="col-md-5">
+                <div class="form-group label-floating">
+                    <label asp-for="ChargeAmount" class="control-label"></label> In pennies
+                    <input asp-for="ChargeAmount" type="text" class="form-control">
+                    <span asp-validation-for="ChargeAmount" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="form-group label-floating">
+                    <label asp-for="CitationFineAmount" class="control-label"></label>
+                    <input asp-for="CitationFineAmount" type="text" class="form-control">
+                    <span asp-validation-for="CitationFineAmount" class="text-danger"></span>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-md-5">
+                <div class="form-group label-floating">
+                    <label asp-for="ProcessingFee" class="control-label"></label>
+                    <input asp-for="ProcessingFee" type="text" class="form-control">
+                    <span asp-validation-for="ProcessingFee" class="text-danger"></span>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-md-5">
+                <div class="form-group label-floating">
+                    <label asp-for="Status" class="control-label"></label>
+                    <select asp-for="Status" class="form-control">
+                        <option></option>
+                        <option value="@CityApp.Data.Enums.PaymentType.Stripe">@CityApp.Data.Enums.PaymentType.Stripe</option>
+                        <option value="@CityApp.Data.Enums.PaymentType.Check">@CityApp.Data.Enums.PaymentType.Check</option>
+                        <option value="@CityApp.Data.Enums.PaymentType.ManualCharge">@CityApp.Data.Enums.PaymentType.ManualCharge</option>
+                    </select>
+                    <span asp-validation-for="Status" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="form-group label-floating">
+                    <label asp-for="ChargeId" class="control-label">Charge Description</label>
+                    @if (!Model.Id.HasValue && Model.Status != PaymentType.Stripe)
+                    {
+                        <input asp-for="ChargeId" type="text" class="form-control">
+                        <span asp-validation-for="ChargeId" class="text-danger"></span>
+                    }
+                    else
+                    {
+                        Html.HiddenFor(m => m.ChargeId);
+                        <span>Model.ChargeId</span>
+                    }
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <button type="submit" class="btn btn-fill btn-rose">Save<div class="ripple-container"></div></button>
+
+                <a asp-controller="Citations" asp-action="Citation" asp-route-id="@Model.CitationId" asp-route-accountId="@Model.AccountId"> Cancel</a>
+            </div>
+        </div>
+    </div>
+
+</form>
+
+                

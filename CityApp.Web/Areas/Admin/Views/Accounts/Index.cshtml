@@ -1,0 +1,159 @@
+﻿
+@model AccountListViewModel
+@{
+    ViewData["Title"] = "Accounts";
+
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header card-header-icon" data-background-color="green">
+                    <i class="material-icons">folder_shared</i>
+                </div>
+                <div class="card-content clearfix">
+                    <h4 class="card-title pull-left">
+                        @ViewData["Title"]
+                    </h4>
+                    <!--  Here you can write extra buttons/actions for the toolbar   -->
+                    <a asp-area="admin" asp-action="Create" asp-controller="Accounts" class="btn btn-info fltrght btn-addcl pull-right">
+
+                        <span class="btn-label">
+                            <i class="material-icons">add</i>
+                        </span>
+                        Create New Account<div class="ripple-container"></div>
+                    </a>
+                    <div class="toolbar cl-addbtn-outer">
+                        <div class="row">
+                            <div class="col-sm-12">
+
+                            </div>
+                        </div>
+                        <form asp-action="Index" method="get" asp-controller="Accounts">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <input asp-for="Searchstring" class="form-control" placeholder="Search">
+                                </div>
+                                <div class="col-sm-6 srchbtn">
+                                    <button type="submit" class="btn btn-primary btn-round btn-fab btn-fab-mini">
+                                        <i class="material-icons">search</i>
+                                        <div class="ripple-container"></div>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                    <div class="material-datatables responsivetable">
+                        <table id="datatables" class="table table-striped table-no-bordered table-hover" cellspacing="0" width="100%" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <a class="HeadColor" asp-action="Index"
+                                           asp-route-sortDirection="@Model.OppositeSortDirection"
+                                           asp-route-sortOrder="@AccountListViewModel.NameSortParam"
+                                           asp-route-Searchstring="@Model.Searchstring">Name</a>
+                                    </th>
+                                    <th>
+                                        <a class="HeadColor" asp-action="Index"
+                                           asp-route-sortDirection="@Model.OppositeSortDirection"
+                                           asp-route-sortOrder="@AccountListViewModel.CitySortParam"
+                                           asp-route-Searchstring="@Model.Searchstring">City</a>
+                                    </th>
+                                    <th>
+                                        <a class="HeadColor" asp-action="Index"
+                                           asp-route-sortDirection="@Model.OppositeSortDirection"
+                                           asp-route-sortOrder="@AccountListViewModel.FullNameSortParam"
+                                           asp-route-Searchstring="@Model.Searchstring">Owner</a>
+                                    </th>
+                                    <th>
+                                        <a class="HeadColor" asp-action="Index"
+                                           asp-route-sortDirection="@Model.OppositeSortDirection"
+                                           asp-route-sortOrder="@AccountListViewModel.PartitionSortParam"
+                                           asp-route-Searchstring="@Model.Searchstring">Partition</a>
+                                    </th>
+                                    <th class="disabled-sorting text-right">Actions</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @foreach (var account in Model.Accounts)
+                                {
+                                    <tr>
+                                        <td>
+                                            <a asp-route="Account" asp-route-action="Index" asp-route-controller="Home" asp-route-accountNum="@account.Number" class="blue-link">@account.Name</a>
+
+                                        </td>
+
+                                        <td>@account.CityName</td>
+                                        @if (string.IsNullOrWhiteSpace(account.FullName))
+                                        {
+                                            <td>@account.Email</td>
+                                        }
+                                        else
+                                        {
+                                            <td>@account.Email (@account.FullName)</td>
+
+
+                                        }
+                                        <td>@account.PartitionName</td>
+                                        <td class="text-right">
+                                            <a href="Admin/Accounts/Edit?AccountNumber=@account.Number" class="btn btn-simple btn-info btn-icon like AccountAction"><i class="material-icons">edit</i></a>
+                                            <a href="Admin/Accounts/Violations?AccountId=@account.Id" class="btn btn-simple btn-info btn-icon like AccountAction"><i class="material-icons">warning</i></a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="pull-left">
+                                <cs-pager cs-paging-info="@Model.Paging"
+                                          cs-paging-pagesize="@Model.Paging.ItemsPerPage"
+                                          cs-paging-pagenumber="@Model.Paging.CurrentPage"
+                                          cs-paging-totalitems="@Model.Paging.TotalItems"
+                                          cs-pagenumber-param="page"
+                                          cs-show-first-last="true"
+                                          cs-suppress-empty-nextprev="true"
+                                          cs-suppress-inactive-firstlast="true"
+                                          cs-first-page-text="First"
+                                          cs-last-page-text="Last"
+                                          cs-pager-li-current-class="active"
+                                          cs-pager-li-non-active-class="disabled"
+                                          cs-paging-maxpageritems="10"
+                                          cs-first-page-title=" First Page"
+                                          cs-last-page-title="Last Page"
+                                          cs-next-page-title=" Next page"
+                                          cs-pager-ul-class=" pagination"
+                                          cs-ajax-mode="replace"
+                                          cs-ajax-success-empty=" a callback"
+                                          cs-ajax-failure-empty=" a callback"
+                                          asp-route-sortDirection="@Model.SortDirection"
+                                          asp-route-sortOrder="@Model.SortOrder"
+                                          asp-route-Searchstring="@Model.Searchstring"
+                                          asp-route-PageSize="@Model.PageSize"
+                                          asp-controller="Accounts"
+                                          asp-action="Index">
+
+                                </cs-pager>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <p class="mt pull-right">
+                                Total results: @Model.Paging.TotalItems<br />
+                                <a asp-action="PurgeCache" asp-controller="Accounts" >Purge Cache</a>
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- end content-->
+            </div>
+            <!--  end card  -->
+        </div>
+        <!-- end col-md-12 -->
+    </div>
+    <!-- end row -->
+</div>

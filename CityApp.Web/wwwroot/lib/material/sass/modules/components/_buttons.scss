@@ -1,0 +1,46 @@
+button {
+    position: relative;
+    box-sizing: border-box;
+    border-radius: 2px;
+    background-color: #fff;
+    padding: $horizontal-margin;
+    margin: 6px 0 6px 6px;
+    color: $brand-primary;
+    border: none;
+    min-width: 64px;
+    height: 36px;
+    line-height: 36px;
+    transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+    user-select: none;
+    @extend .resting-shadow;
+    &.pull-left {
+        margin-left: 0;
+        float: left;
+    }
+    &.pull-right {
+        margin-right: 0;
+        float: right;
+    }
+    &:hover {
+        @extend .raised-shadow;
+        color: lighten($brand-primary, 5%);
+    }
+    &:focus {
+        outline: none;
+    }
+    &.colored {
+        background-color: $brand-primary;
+        color: #fff;
+        &:hover {
+            background-color: lighten($brand-primary, 5%);
+            @extend .raised-shadow;
+        }
+    }
+    &.flat {
+        @extend .flat-shadow;
+        background-color: transparent;
+        &:hover {
+            @extend .flat-shadow;
+        }
+    }
+}

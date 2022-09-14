@@ -1,0 +1,171 @@
+﻿@model List<Citation>
+@inject IAuthorizationService AuthorizationService
+@{
+    var globalViewData = (GlobalViewDataModel)ViewData[ViewDataKey.GlobalViewData];
+    var loggedInUser = (LoggedInUser)ViewData[ViewDataKey.LoggedInUser];
+
+    var citationsAssignedToMe = Model.Where(m => m.AssignedToId == loggedInUser.Id).ToList();
+}
+
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="card card-stats card-raised">
+                <div class="card-header" data-background-color="orange">
+                    <i class="material-icons">content_paste</i>
+                </div>
+                <div class="card-content">
+                    <p class="category">Recent citations</p>
+                    <h3 class="card-title">@Model.Take(5).Count()</h3>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead class="text-primary">
+                                <tr>
+                                    <th class="text-right">Type</th>
+                                    <th class="text-right">Number</th>
+                                    <th class="text-right">Status</th>
+                                    <th class="text-right">Violation</th>
+                                    <th class="text-right">Created</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var citation in Model.OrderByDescending(m => m.CreateUtc).Take(5))
+                                {
+                                    <tr>
+                                        <td>
+                                            <a asp-route="Account" asp-route-action="Citation" asp-route-controller="Citations" asp-route-accountnum="@globalViewData.AccountNumber" asp-route-id="@citation.Id">@citation.Violation.Category.Type.Name</a>
+                                        </td>
+                                        <td>
+                                            <a asp-route="Account" asp-route-action="Citation" asp-route-controller="Citations" asp-route-accountnum="@globalViewData.AccountNumber" asp-route-id="@citation.Id">@citation.CitationNumber</a>
+                                        </td>
+                                        <td>@citation.Status.GetEnumName()</td>
+                                        @if (citation.Violation != null)
+                                        {
+                                            <td>@citation.Violation.Name </td>
+                                        }
+                                        else
+                                        {
+                                            <td> </td>
+                                        }
+                                        <td>@citation.CreateUtc.Humanize()</td>
+                                    </tr>
+
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+                <div class="card-footer">
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12 col-md-6">
+            <div class="card card-stats card-raised">
+                <div class="card-header" data-background-color="rose">
+                    <i class="material-icons">content_paste</i>
+                </div>
+
+
+                <div class="card-content">
+                    <p class="category"></p>
+                    <h3 class="card-title">Assigned To Me</h3>
+
+
+                    <div class="table-responsive table-sales">
+                        <table class="table">
+                            <tr>
+                                <td><a asp-action="Index" asp-controller="Citations" asp-route-AssignedToId="@loggedInUser.Id" asp-route-StatusId="@CitationStatus.Open">Open</a></td>
+                                <td><a asp-action="Index" asp-controller="Citations" asp-route-AssignedToId="@loggedInUser.Id" asp-route-StatusId="@CitationStatus.Open">@citationsAssignedToMe.Where(x => x.Status == CitationStatus.Open ).Count() </a></td>
+                            </tr>
+                            <tr>
+                                <td><a asp-action="Index" asp-controller="Citations" asp-route-AssignedToId="@loggedInUser.Id"  asp-route-StatusId="@CitationStatus.Approved">Approved</a></td>
+                                <td><a asp-action="Index" asp-controller="Citations" asp-route-AssignedToId="@loggedInUser.Id"  asp-route-StatusId="@CitationStatus.Approved">@citationsAssignedToMe.Where(x => x.Status == CitationStatus.Approved ).Count()</a></td>
+                            </tr>
+                            <tr>
+                                <td><a asp-action="Index" asp-controller="Citations" asp-route-AssignedToId="@loggedInUser.Id"  asp-route-StatusId="@CitationStatus.InReview">@CitationStatus.InReview.GetEnumName()</a></td>
+                                <td><a asp-action="Index" asp-controller="Citations" asp-route-AssignedToId="@loggedInUser.Id"  asp-route-StatusId="@CitationStatus.InReview">@citationsAssignedToMe.Where(x => x.Status == CitationStatus.InReview).Count()</a></td>
+                            </tr>
+                        </table>
+
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="stats">
+                        @*<i class="material-icons">info_outline</i> <a href="#">Open &amp; Unassigned Citation</a>*@
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        @foreach (var type in globalViewData.ViolationTypes)
+        {
+            <div class="col-xs-12 col-md-6">
+                <div class="card card-stats card-raised">
+                    <div class="card-header" data-background-color="green">
+                        <i class="material-icons">content_paste</i>
+                    </div>
+
+
+                    <div class="card-content">
+                        <p class="category"></p>
+                        <h3 class="card-title">@type.Name</h3>
+
+
+                        <div class="table-responsive table-sales">
+                            <table class="table">
+                                <tr>
+                                    <td><a asp-action="Index" asp-controller="Citations" asp-route-ViolationTypeId="@type.Id" asp-route-StatusId="@CitationStatus.Open">Open</a></td>
+                                    <td><a asp-action="Index" asp-controller="Citations" asp-route-ViolationTypeId="@type.Id" asp-route-StatusId="@CitationStatus.Open">@Model.Where(x=>x.Status==CitationStatus.Open && x.Violation.Category.TypeId==type.Id).Count() </a></td>
+                                </tr>
+                                <tr>
+                                    <td><a asp-action="Index" asp-controller="Citations" asp-route-ViolationTypeId="@type.Id" asp-route-StatusId="@CitationStatus.Approved">Approved</a></td>
+                                    <td><a asp-action="Index" asp-controller="Citations" asp-route-ViolationTypeId="@type.Id" asp-route-StatusId="@CitationStatus.Approved">@Model.Where(x => x.Status == CitationStatus.Approved && x.Violation.Category.TypeId == type.Id).Count()</a></td>
+                                </tr>
+                                <tr>
+                                    <td><a asp-action="Index" asp-controller="Citations" asp-route-ViolationTypeId="@type.Id" asp-route-StatusId="@CitationStatus.InReview">@CitationStatus.InReview.GetEnumName()</a></td>
+                                    <td><a asp-action="Index" asp-controller="Citations" asp-route-ViolationTypeId="@type.Id" asp-route-StatusId="@CitationStatus.InReview">@Model.Where(x => x.Status == CitationStatus.InReview && x.Violation.Category.TypeId == type.Id).Count()</a></td>
+                                </tr>
+                            </table>
+
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="stats">
+                            @*<i class="material-icons">info_outline</i> <a href="#">Open &amp; Unassigned Citation</a>*@
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        }
+
+
+    </div>
+</div>
+@section scripts
+{
+    <environment names="@EnvironmentNames.DEVELOPMENT">
+        <script src="~/lib/chartist/dist/chartist.min.js"></script>
+        <script src="~/js/home/dashboard.js" asp-append-version="true"></script>
+
+    </environment>
+
+    <environment names="@EnvironmentNames.NOT_DEVELOPMENT">
+        <script src="~/lib/chartist/dist/chartist.min.js" asp-append-version="true"></script>
+        <script src="~/js/home/dashboard.min.js" asp-append-version="true"></script>
+
+    </environment>
+
+    <script>
+        dashboard.initChart();
+    </script>
+}

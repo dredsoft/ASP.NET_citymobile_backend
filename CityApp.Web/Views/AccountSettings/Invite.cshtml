@@ -1,0 +1,111 @@
+@model AccountUserViewModel
+
+@{
+    ViewData["Title"] = "User Invitation";
+    var globalViewData = (GlobalViewDataModel)ViewData[ViewDataKey.GlobalViewData];
+    var loggedInUser = (LoggedInUser)ViewData[ViewDataKey.LoggedInUser];
+
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header card-header-icon" data-background-color="green">
+                    @ViewData["Title"]
+                </div>
+                <div class="card-content">
+                    <form method="post" role="form" asp-antiforgery="true">
+                        <div class="row mrgnTop30">
+                            <div class="col-sm-12">
+                                <div asp-validation-summary="ModelOnly"></div>
+                            </div>
+                        </div>
+                        <div class="col-sm-10">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group label-floating">
+                                        <label asp-for="FirstName" class="control-label"></label>
+                                        <input asp-for="FirstName" type="text" class="form-control">
+                                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group label-floating">
+                                        <label asp-for="LastName" class="control-label"></label>
+                                        <input asp-for="LastName" type="text" class="form-control">
+                                        <span asp-validation-for="LastName" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group label-floating">
+                                        <label asp-for="Email" class="control-label"></label>
+                                        <input asp-for="Email" type="text" class="form-control">
+                                        <span asp-validation-for="Email" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                @if (Model.IsVendor)
+                                {
+                                    <div class="col-md-6">
+                                        <div class="form-group label-floating">
+                                            <select asp-for="VendorId" asp-items="Model.Vendors" class="form-control">
+                                                <option value="">Select Vendor</option>
+                                            </select>
+                                            <span asp-validation-for="VendorId" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                }
+                                <div class="col-md-6">
+                                    <div class="form-group label-floating">
+
+                                        <label class="col-md-3 label-on-left">User Type</label>
+                                        <div class="col-md-9">
+
+                                            <select asp-for="systemPermission" asp-items="Model.SystemPermissions" class="form-control"></select>
+                                            <span asp-validation-for="systemPermission" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="row mt">
+                                <div class="col-xs-12">
+                                    <strong>Permissions</strong><br />
+                                </div>
+                            </div>
+                            <div class="row">
+                                @foreach (AccountPermissions permission in Enum.GetValues(typeof(AccountPermissions)))
+                                {
+                                    <div class="form-group col-sm-6 togglebutton">
+                                        <label>
+                                            <input type="checkbox" name="Permissions" value="@permission.ToString()" class="permission-checkbox permissionbox" />
+                                            @permission.GetName()
+                                        </label>
+                                    </div>
+                                }
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <button type="submit" class="btn btn-fill btn-rose"><i class="material-icons">mail_outline</i> Send Invite<div class="ripple-container"></div></button>
+
+                                    <a asp-action="Users" asp-controller="AccountSettings" asp-route-accountNum="@globalViewData.AccountNumber"> Cancel</a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+
+                    <!-- end content-->
+                </div>
+                <!--  end card  -->
+            </div>
+            <!-- end col-md-12 -->
+        </div>
+        <!-- end row -->
+    </div>
+</div>
+

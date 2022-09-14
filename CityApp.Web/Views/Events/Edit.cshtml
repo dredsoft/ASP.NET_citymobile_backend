@@ -1,0 +1,197 @@
+@model EventViewModel
+@inject Microsoft.Extensions.Options.IOptions<AppSettings> AppSettings
+@{
+    ViewData["Title"] = "Edit Event";
+    Layout = "~/Views/Shared/_InternalLayout.cshtml";
+
+    var googleAppKey = AppSettings.Value.GoogleMapsAPIKey;
+
+}
+
+@section styles
+    {
+    <!-- include libraries(jQuery, bootstrap) -->
+    <!-- include codemirror (codemirror.css, codemirror.js, xml.js, formatting.js) -->
+    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/codemirror.css">
+    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/theme/monokai.css">
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/codemirror.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/mode/xml/xml.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/codemirror/2.36.0/formatting.js"></script>
+    <link href="~/lib/summernote/dist/summernote.css" rel="stylesheet" asp-append-version="true" />
+
+    <style>
+        .modal-backdrop {
+            position: static !important;
+        }
+    </style>
+}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header card-header-icon" data-background-color="green">
+                    @ViewData["Title"]
+                </div>
+                <div class="card-content">
+
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header card-header-tabs" data-background-color="blue" style="float:left;">
+                                    <div class="nav-tabs-navigation">
+                                        <div class="nav-tabs-wrapper">
+                                            <ul class="nav nav-tabs" data-tabs="tabs">
+                                                <li class="ml active">
+                                                    <a href="#event-details" data-toggle="tab" aria-expanded="true">
+                                                        <i class="material-icons">event</i>
+                                                        Event Details
+                                                        <div class="ripple-container"></div>
+                                                    </a>
+                                                </li>
+                                                <li class="ml">
+                                                    <a href="#event-location" data-toggle="tab" aria-expanded="true">
+                                                        <i class="material-icons">location_on</i>
+                                                        Boundary
+                                                        <div class="ripple-container"></div>
+                                                    </a>
+                                                </li>
+
+                                                <li class="ml">
+                                                    <a href="#pill2" data-toggle="tab" aria-expanded="false">
+                                                        <i class="material-icons">
+                                                            monetization_on
+                                                        </i>
+                                                        Parking Violation Pricing
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-content" style="margin-top:45px;">
+                                    <div class="tab-content">
+                                        <div class="tab-pane active" id="event-details">
+                                            <form method="post" role="form" asp-antiforgery="true">
+                                                @Html.HiddenFor(m => m.Body)
+                                                @Html.HiddenFor(m => m.Id)
+
+                                                <div class="row mrgnTop30">
+                                                    <div class="col-sm-12">
+                                                        <div asp-validation-summary="ModelOnly"></div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label asp-for="Title" class="control-label"></label>
+                                                            <input asp-for="Title" type="text" class="form-control">
+                                                            <span asp-validation-for="Title" class="text-danger"></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label asp-for="Start" class="control-label"></label>
+                                                            <input asp-for="Start" type="text" class="form-control datetimepicker">
+                                                            <span asp-validation-for="Start" class="text-danger"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label asp-for="End" class="control-label"></label>
+                                                            <input asp-for="End" type="text" class="form-control datetimepicker">
+                                                            <span asp-validation-for="End" class="text-danger"></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row pt-lg">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group label-floating" id="editor">
+                                                        </div>
+                                                        <span asp-validation-for="Body" class="text-danger"></span>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <button type="submit" id="submit" class="btn btn-fill btn-rose">Save</button>
+                                                        <a asp-route-action="Events" asp-route-controller="AccountSettings"> Cancel</a>
+                                                        <a class="pull-right pt-lg" id="delete" EventId="@Model.Id" href="Javascript:void(0)"> Delete</a>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="tab-pane" id="event-location">
+                                            <button class="btn btn-primary btn-sm" @@click="draw">Draw Boundary</button>
+                                            <button @@click="clear" class="btn btn-sm btn-warning">Clear Boundary</button>
+                                            <button @@click="submit" v-show="isReadyToSave" class="btn btn-success pull-right">Save Boundary</button>
+                                            <p>Use the map to draw a boundry around the event</p>
+                                            <div id="event-map" style="height:500px;width:100%"></div>
+                                        </div>
+
+                                        <div class="tab-pane" id="pill2">
+                                            @Html.Partial("_EventViolationPricing")
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div><!-- end content-->
+                        </div><!--  end card  -->
+                    </div><!-- end col-md-12 -->
+                    <!-- end content-->
+                </div>
+                <!--  end card  -->
+            </div>
+            <!-- end col-md-12 -->
+        </div>
+        <!-- end row -->
+    </div>
+</div>
+
+@section scripts
+    {
+
+
+
+    <script type="text/javascript">
+        objEvent = {
+            DeleteUrl: '@Url.Action("Delete", "Events")',
+            EventsUrl: '@Url.Action("Index", "Events")',
+            GetCoords: '@Url.Action("GetCoordinates", "Events", new { id = Model.Id })',
+            AddCoords: '@Url.Action("AddCoordinates", "Events")',
+            DeleteCoords: '@Url.Action("DeleteCoordinates", "Events", new { id = Model.Id })',
+            AddPricing: '@Url.Action("AddPricing", "Events")',
+            DeletePricing: '@Url.Action("DeletePricing", "Events")',
+            GetPricing: '@Url.Action("GetPricing", "Events", new { id = Model.Id })',
+            lat:@Model.Latitude,
+            long: @Model.Longitude,
+            violations: @Html.ToJson(Model.Violations),
+            prices: @Html.ToJson(Model.EventViolationPrices),
+            EventId: @Html.ToJson(Model.Id)
+        }
+    </script>
+    <environment names="@EnvironmentNames.DEVELOPMENT">
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.min.js"></script>
+        <script src="~/lib/summernote/dist/summernote.js" asp-append-version="true"></script>
+        <script src="~/js/Event/Event.js" asp-append-version="true"></script>
+        <script src="~/js/Event/EventLocation.js" asp-append-version="true"></script>
+        <script src="~/js/Event/EventViolationPricing.js" asp-append-version="true"></script>
+        <script src="~/lib/underscore/underscore-min.js"></script>
+    </environment>
+
+    <environment names="@EnvironmentNames.NOT_DEVELOPMENT">
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.min.js"></script>
+        <script src="~/lib/summernote/dist/summernote.min.js" asp-append-version="true"></script>
+        <script src="~/js/Event/Event.min.js" asp-append-version="true"></script>
+        <script src="~/js/Event/EventLocation.min.js" asp-append-version="true"></script>
+        <script src="~/js/Event/EventViolationPricing.min.js" asp-append-version="true"></script>
+        <script src="~/lib/underscore/underscore-min.js"></script>
+    </environment>
+
+    <!-- Initialize Quill editor -->
+    <script src="@Html.Raw($"https://maps.googleapis.com/maps/api/js?key={googleAppKey}&libraries=visualization,drawing&callback=eventLocation.initMap")" async defer>
+    </script>
+}
+

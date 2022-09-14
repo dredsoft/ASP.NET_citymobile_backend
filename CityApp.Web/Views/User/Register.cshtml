@@ -1,0 +1,58 @@
+﻿@model UserRegisterModel
+@{
+    Layout = "_ExternalLayout";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 col-sm-6 col-sm-offset-3">
+            <div class="card card-signup">
+                <h2 class="card-title text-center">Register</h2>
+                <form class="form-signin" asp-antiforgery="true">
+                    <div class="card-content">
+                        <div asp-validation-summary="ModelOnly"></div>
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="material-icons">email</i>
+                            </span>
+                            <input asp-for="Email" class="form-control" placeholder="Email..." autofocus="">
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="material-icons">lock_outline</i>
+                            </span>
+                            <input asp-for="Password" class="form-control" placeholder="Password..." />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="material-icons">lock_outline</i>
+                            </span>
+                            <input asp-for="PasswordAgain" class="form-control" placeholder="Confirm Password..." />
+                            <span asp-validation-for="PasswordAgain" class="text-danger"></span>
+                        </div>
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" asp-for="IsChecked"> I agree to the
+                                <a href="/User/TermCondition" target="_blank">terms and conditions</a>.
+                            </label>
+                            <br />
+                            <span asp-validation-for="IsChecked" class="text-danger"></span>
+
+                        </div>
+                    </div>
+                    <div class="footer text-center">
+                        <button class="btn btn-primary btn-round" type="submit">Register</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+

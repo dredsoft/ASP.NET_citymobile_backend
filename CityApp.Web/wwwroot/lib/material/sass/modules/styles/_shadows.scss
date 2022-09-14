@@ -1,0 +1,23 @@
+.flat{
+	box-shadow: 0;
+}
+
+.resting{
+	box-shadow:0 2px 5px 0 rgba(0,0,0,0.16), 0 2px 10px 0 rgba(0,0,0,0.12);
+}
+
+.raised{
+	box-shadow:0 5px 11px 0 rgba(0, 0, 0, 0.18),  0 4px 15px 0 rgba(0, 0, 0, 0.15);
+}
+
+.floating{
+	box-shadow:0 8px 17px 0 rgba(0, 0, 0, 0.2),  0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.elevated{
+	box-shadow:0 14px 20px 0 rgba(0, 0, 0, 0.21),  0 20px 40px 0 rgba(0, 0, 0, 0.21);
+}
+
+.dialog{
+	box-shadow:0 27px 24px 0 rgba(0, 0, 0, 0.23), 0 40px 77px 0 rgba(0, 0, 0, 0.22);
+}

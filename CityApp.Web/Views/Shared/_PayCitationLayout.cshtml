@@ -1,0 +1,58 @@
+﻿@inject Microsoft.AspNetCore.Hosting.IHostingEnvironment HostingEnvironment
+@{
+    var title = "Pay City Citations";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    @Html.Partial("_gTag")
+    <meta charset="utf-8" />
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+    <meta name="viewport" content="width=device-width" />
+    <title>@title</title>
+   
+
+    @Html.Partial("_CommonStyles")
+
+    <environment names="@EnvironmentNames.DEVELOPMENT">
+        <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" asp-append-version="true" />
+        <link href="~/css/material-dashboard.min.css" rel="stylesheet" asp-append-version="true" />
+    </environment>
+    <environment names="@EnvironmentNames.NOT_DEVELOPMENT">
+        <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" asp-append-version="true" />
+        <link href="~/css/material-dashboard.min.css" rel="stylesheet" asp-append-version="true" />
+    </environment>
+
+    @RenderSection("styles", required: false)
+
+
+</head>
+
+<body>
+    <div class="wrapper">
+        <div class="main-panel">
+            <div class="content">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+
+
+    <environment names="@EnvironmentNames.DEVELOPMENT">
+        <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
+        <script src="~/js/material-dashboard.js" asp-append-version="true"></script>
+    </environment>
+
+    <environment names="@EnvironmentNames.NOT_DEVELOPMENT">
+        <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
+        <script src="~/js/material-dashboard.js" asp-append-version="true"></script>
+    </environment>
+    <script type="text/javascript">
+
+    </script>
+
+    @RenderSection("scripts", required: false)
+</body>
+
+
+</html>

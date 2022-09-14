@@ -1,0 +1,125 @@
+@inject Microsoft.Extensions.Options.IOptions<AppSettings> AppSettings
+
+@model CityApp.Web.Models.Citations.CitationsListViewModel
+
+@{
+    ViewData["Title"] = "Heat Maps";
+    Layout = "~/Views/Shared/_InternalLayout.cshtml";
+    var globalViewData = (GlobalViewDataModel)ViewData[ViewDataKey.GlobalViewData];
+    var googleAppKey = AppSettings.Value.GoogleMapsAPIKey;
+}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+
+            <div class="card">
+                @Html.Partial("_TabNavigation")
+
+                <div class="card-content clearfix">
+                    <h4 class="card-title pull-left">
+                        @ViewData["Title"]
+                    </h4>
+                    <div class="toolbar cl-addbtn-outer">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <!-- Here you can write extra buttons/actions for the toolbar -->
+                            </div>
+                        </div>
+                    </div>
+                    <form asp-action="HeatMaps" method="get" asp-controller="Citations">
+                        @Html.HiddenFor(m => m.ViolationTypeId)
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <input asp-for="CreatedFrom" class="form-control datepicker" placeholder="Created From">
+                            </div>
+                            <div class="col-sm-2">
+                                <input asp-for="CreatedTo" class="form-control datepicker" placeholder="Created To">
+                            </div>
+                            <div class="col-sm-2">
+                                <select asp-for="StatusId" asp-items="Html.GetEnumSelectList<CitationStatus>()" class="form-control">
+                                    <option >Status</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-2">
+                                <select asp-for="AssignedToId" asp-items="Model.AssignedToList" class="form-control">
+                                    <option>Assigned To</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select asp-for="ViolationId" asp-items="Model.Violations" class="form-control">
+                                    <option>Violation</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-2">
+                                <input asp-for="LicensePlate" class="form-control" placeholder="License Plate" >
+                            </div>
+                            <div class="col-sm-2">
+                                <input asp-for="PostalCode" class="form-control" placeholder="Postal Code">
+                            </div>
+                            <div class="col-sm-2">
+                                <input asp-for="Street" class="form-control" placeholder="Street">
+                            </div>
+                            <div class="col-sm-1" style="margin-top:9px;">
+                                <button type="submit" class="btn btn-primary btn-round btn-fab btn-fab-mini">
+                                    <i class="material-icons">search</i>
+                                    <div class="ripple-container"></div>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
+                    
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div id="map" style="height:500px;width:100%"></div>
+                            </div>
+                        </div>
+                        <div class="row mt">
+                            <a asp-action="Index"
+                               asp-route-CreatedFrom="@Model.CreatedFrom"
+                               asp-route-Createdto="@Model.CreatedTo"
+                               asp-route-StatusId="@Model.StatusId"
+                               asp-route-AssignedToId="@Model.AssignedToId"
+                               asp-route-LicensePlate="@Model.LicensePlate"
+                               asp-route-ViolationTypeId="@Model.ViolationTypeId"
+                               asp-route-ViolationId="@Model.ViolationId"
+                                asp-route-PostalCode="@Model.PostalCode"
+                               asp-route-Street="@Model.Street"
+                               class="pull-left" style="text-decoration:underline;"><i style="float:left" class="material-icons">view_list</i><div style="float:left">View as list</div></a>
+
+                        </div>
+
+                   
+                </div>
+                <!-- end content-->
+            </div>
+            <!--  end card  -->
+        </div>
+        <!-- end col-md-12 -->
+    </div>
+    <!-- end row -->
+</div>
+
+@section scripts
+{
+    <script src="@Html.Raw($"https://maps.googleapis.com/maps/api/js?key={googleAppKey}&libraries=visualization")">
+    </script>
+
+
+    <script type="text/javascript">
+       var objCitation = {
+           CitationUrl: '@Url.Action("GetLatLng", "Citations")'
+            };
+
+    </script>
+
+    <environment names="@EnvironmentNames.DEVELOPMENT">
+        <script src="~/js/citation/HeatMap.js" asp-append-version="true"></script>
+    </environment>
+
+
+    <environment names="@EnvironmentNames.NOT_DEVELOPMENT">
+        <script src="~/js/citation/HeatMap.min.js" asp-append-version="true"></script>
+    </environment>
+}
+

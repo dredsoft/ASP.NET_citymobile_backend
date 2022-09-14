@@ -1,0 +1,19 @@
+// Breakpoints
+$xsmall-display-min: 0px !default;
+$xsmall-display-max: 480px !default;
+$small-display-min: 481px !default;
+$small-display-max: 840px !default;
+$medium-display-min: 841px !default;
+$medium-display-max: 1280px !default;
+$large-display-min: 1281px !default;
+$large-display-max: 1920px !default;
+$xlarge-display-min: 1921px !default;
+
+$xsmall-only: "only screen and (max-width : #{$xsmall-display-max})" !default;
+$small-and-up: "only screen and (min-width : #{$small-display-min})" !default;
+$small-only: "only screen and (min-width : #{$small-display-min}) and (max-width : #{$small-display-max})" !default;
+$medium-and-up: "only screen and (min-width : #{$medium-display-min})" !default;
+$medium-only: "only screen and (min-width : #{$medium-display-min}) and (max-width : #{$medium-display-max})" !default;
+$large-and-up: "only screen and (min-width : #{$large-display-min})" !default;
+$large-only: "only screen and (min-width : #{$large-display-min}) and (max-width : #{$large-display-max})" !default;
+$xlarge-and-up: "only screen and (min-width : #{$xlarge-display-min})" !default;

@@ -1,0 +1,52 @@
+@model CityApp.Web.Models.Accounts.AccountInfoViewModel
+@{
+    ViewData["Title"] = "Info and Events";
+    Layout = null;
+
+
+    var isInfoEnabled = Model.Account.Features.HasFlag(AccountFeatures.Info);
+}
+
+<html>
+<head>
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" asp-append-version="true" />
+</head>
+
+<body>
+    <div class="container-fluid">
+        @if (Model.Account != null || isInfoEnabled == false)
+        {
+            <div class="row">
+                <div class="col-xs-12">
+
+                </div>
+            </div>
+        }
+        @if (Model.Events.Any() && isInfoEnabled)
+        {
+                var events = Model.Events;
+
+                foreach (var accountEvent in events)
+                {
+                 <div class="row">
+                     <div class="col-xs-12">
+                         <div class="panel panel-default">
+                             <div class="panel-heading">@accountEvent.Title</div>
+                             <div class="panel-body">@Html.Raw(accountEvent.Body)</div>
+                         </div>
+                     </div>
+                 </div>
+                }
+        }
+        else
+        {
+            <div class="row">
+                <div class="col-md-12">
+                   <h1></h1>
+                </div>
+            </div>
+        }
+    </div>
+</body>
+</html>
+

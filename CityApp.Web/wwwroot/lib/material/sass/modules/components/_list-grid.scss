@@ -1,0 +1,107 @@
+/*-- Grid List --*/
+
+.cell {
+    float: left;
+    position: relative;
+    box-sizing: border-box;
+    border: 1px solid black;
+}
+
+$i: 1;
+
+@while $i <= 4 {
+    background-color: orange;
+    $perc: unquote(100 / $i + "%");
+    &.xsg#{$i} > .cell {
+        width: $perc;
+    }
+    &.xsg#{$i} > .cell:nth-of-type(1n) {
+        clear: none;
+    }
+    &.xsg#{$i} > .cell:nth-of-type(#{$i}n+1) {
+        clear: both;
+    }
+    $i: $i + 1;
+}
+
+/*small grid*/
+@media #{$small-and-up} {
+    background-color: red;
+    $i: 1;
+    @while $i <= 8 {
+        $perc: unquote(100 / $i + "%");
+        &.sg#{$i} > .cell {
+            width: $perc;
+        }
+        &.sg#{$i} > .cell:nth-of-type(1n) {
+            clear: none;
+        }
+        &.sg#{$i} > .cell:nth-of-type(#{$i}n+1) {
+            clear: both;
+        }
+        $i: $i + 1;
+    }
+}
+
+/*medium grid*/
+@media #{$medium-and-up} {
+    background-color: yellow;
+    $i: 1;
+    @while $i <= 12 {
+        $perc: unquote(100 / $i + "%");
+        &.mg#{$i} > .cell {
+            width: $perc;
+        }
+        &.mg#{$i} > .cell:nth-of-type(1n) {
+            clear: none;
+        }
+        &.mg#{$i} > .cell:nth-of-type(#{$i}n+1) {
+            clear: both;
+        }
+        $i: $i + 1;
+    }
+}
+
+/*large grid*/
+@media #{$large-and-up} {
+    background-color: greenyellow;
+    $i: 1;
+    @while $i <= 12 {
+        $perc: unquote(100 / $i + "%");
+        &.lg#{$i} > .cell {
+            width: $perc;
+        }
+        &.lg#{$i} > .cell:nth-of-type(1n) {
+            clear: none;
+        }
+        &.lg#{$i} > .cell:nth-of-type(#{$i}n+1) {
+            clear: both;
+        }
+        $i: $i + 1;
+    }
+}
+
+/*xlarge grid*/
+@media #{$xlarge-and-up} {
+    background-color: cornflowerblue;
+    $i: 1;
+    @while $i <= 12 {
+        $perc: unquote(100 / $i + "%");
+        &.xlg#{$i} > .cell {
+            width: $perc;
+        }
+        &.xlg#{$i} > .cell:nth-of-type(1n) {
+            clear: none;
+        }
+        &.xlg#{$i} > .cell:nth-of-type(#{$i}n+1) {
+            clear: both;
+        }
+        $i: $i + 1;
+    }
+}
+
+.grid-list {
+    li{
+        @extend .cell;
+    }
+}

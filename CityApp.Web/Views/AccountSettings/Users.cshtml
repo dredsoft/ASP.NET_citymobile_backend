@@ -1,0 +1,195 @@
+@model AccountUserListViewModel
+@{
+    ViewData["Title"] = "Users";
+    Layout = "~/Views/Shared/_InternalLayout.cshtml";
+    var status = "Active ";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header card-header-icon" data-background-color="green">
+                    <i class="material-icons">assignment_ind</i>
+                </div>
+
+                <div class="card-content clearfix">
+                    <h4 class="card-title pull-left">
+                        @ViewData["Title"]
+                        <div><small>Users that belong to your orginazation.</small></div>
+                    </h4>
+
+                    <!--        Button for send push notification from web -->
+                    @*<a href="javascript:void(0)" id="sndPush"  class="btn btn-info fltrght btn-addcl">
+                            Send Push<div class="ripple-container"></div>
+                        </a>*@
+
+                    <a asp-area="" asp-action="Invite" asp-controller="AccountSettings" class="btn btn-info fltrght btn-addcl">
+                        Invite<div class="ripple-container"></div>
+                    </a>
+                    <div class="toolbar cl-addbtn-outer">
+                        <div class="row">
+                            <div class="col-sm-12">
+
+                            </div>
+                        </div>
+                        <!--        Here you can write extra buttons/actions for the toolbar-->
+
+                        <form asp-action="Users" method="get" asp-controller="AccountSettings">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <input asp-for="Searchstring" class="form-control" placeholder="Search">
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group label-floating">
+                                        <select asp-for="UserType" asp-items="Html.GetEnumSelectList<SystemPermissions>()" class="form-control">
+                                            <option value="">User Type</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 srchbtn">
+                                    <button type="submit" class="btn btn-primary btn-round btn-fab btn-fab-mini">
+                                        <i class="material-icons">search</i>
+                                        <div class="ripple-container"></div>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="material-datatables responsivetable">
+                        <table id="datatables" class="table table-striped table-no-bordered table-hover" cellspacing="0" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <a asp-action="Users"
+                                           asp-route-sortDirection="@Model.OppositeSortDirection"
+                                           asp-route-sortOrder="@AccountUserListViewModel.FullNameSortParam"
+                                           asp-route-userType="@Model.UserType"
+                                           asp-route-Searchstring="@Model.Searchstring">
+                                            Name
+                                        </a>
+                                    </th>
+                                    <th>
+                                        <a asp-action="Users"
+                                           asp-route-sortDirection="@Model.OppositeSortDirection"
+                                           asp-route-sortOrder="@AccountUserListViewModel.EmailNameSortParam"
+                                           asp-route-userType="@Model.UserType"
+                                           asp-route-Searchstring="@Model.Searchstring">
+                                            Email
+                                        </a>
+                                    </th>
+                                    <th>
+                                        <a asp-action="Users"
+                                           asp-route-sortDirection="@Model.OppositeSortDirection"
+                                           asp-route-sortOrder="@AccountUserListViewModel.UserTypeSortParam"
+                                           asp-route-userType="@Model.UserType"
+                                           asp-route-Searchstring="@Model.Searchstring">
+                                            User Type
+                                        </a>
+                                    </th>
+                                    <th>
+                                        <a asp-action="Users"
+                                           asp-route-sortDirection="@Model.OppositeSortDirection"
+                                           asp-route-sortOrder="@AccountUserListViewModel.PermissionsSortParam"
+                                           asp-route-userType="@Model.UserType"
+                                           asp-route-Searchstring="@Model.Searchstring">
+                                            Permissions
+                                        </a>
+                                    </th>
+
+                                    <th>
+                                        <a asp-action="Users"
+                                           asp-route-sortDirection="@Model.OppositeSortDirection"
+                                           asp-route-sortOrder="@AccountUserListViewModel.StatusSortParam"
+                                           asp-route-userType="@Model.UserType"
+                                           asp-route-Searchstring="@Model.Searchstring">
+                                            Status
+                                        </a>
+                                    </th>
+                                    <th class="disabled-sorting text-right">Actions</th>
+
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @foreach (var users in Model.AccountUserList)
+                                {
+                                    if (users.Disabled == false) { status = "Active "; }
+                                    else { status = "Disabled "; }
+                                    <tr>
+                                        <td><a asp-controller="AccountSettings" style="color:#337ab7 !important" asp-action="Edit" asp-route-Id="@users.UserId">@users.FullName</a></td>
+                                        <td><a asp-controller="AccountSettings" style="color:#337ab7 !important" asp-action="Edit" asp-route-Id="@users.UserId">@users.Email</a></td>
+                                        <td>@users.UserType.GetName()</td>
+                                        <td>@users.Permissions.GetName()</td>
+                                        <td>@status</td>
+                                        <td class="text-right">
+                                            <a href="javascript:void(0)" email="@users.Email" id="sndMessage" class="btn btn-simple btn-info btn-icon like AccountAction">message</a>
+                                        </td>
+
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="pull-left">
+                                <cs-pager cs-paging-pagesize="@Model.Paging.ItemsPerPage"
+                                          cs-paging-pagenumber="@Model.Paging.CurrentPage"
+                                          cs-paging-totalitems="@Model.Paging.TotalItems"
+                                          cs-paging-info="@Model.Paging"
+                                          cs-pagenumber-param="page"
+                                          cs-show-first-last="true"
+                                          cs-suppress-empty-nextprev="true"
+                                          cs-suppress-inactive-firstlast="true"
+                                          cs-first-page-text="First"
+                                          cs-last-page-text="Last"
+                                          cs-pager-li-current-class="active"
+                                          cs-pager-li-non-active-class="disabled"
+                                          asp-route-sortDirection="@Model.SortDirection"
+                                          asp-route-sortOrder="@Model.SortOrder"
+                                          asp-route-PageSize="@Model.PageSize"
+                                          asp-route-Searchstring="@Model.Searchstring"
+                                          asp-controller="users"
+                                          asp-action="Index">
+                                </cs-pager>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <p class="mt pull-right">
+                                Total results: @Model.Paging.TotalItems
+                            </p>
+                            @*<div class="clearfix">
+
+                                </div>*@
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+            <!-- end content-->
+
+        </div>
+        <!--  end card  -->
+    </div>
+    <!-- end col-md-12 -->
+</div>
+@section scripts
+{
+
+    <script type="text/javascript">
+        objAccountUser = {
+            SendMessageUrl: '@Url.Action("SendMessage", "AccountSettings")',
+            SendPushUrl: '@Url.Action("SendPushNotification", "AccountSettings")'
+        };
+    </script>
+
+    <environment names="@EnvironmentNames.DEVELOPMENT">
+        <script src="~/js/AccountSetting/AccountUser.js" asp-append-version="true"></script>
+    </environment>
+
+    <environment names="@EnvironmentNames.NOT_DEVELOPMENT">
+        <script src="~/js/AccountSetting/AccountUser.min.js" asp-append-version="true"></script>
+    </environment>
+}

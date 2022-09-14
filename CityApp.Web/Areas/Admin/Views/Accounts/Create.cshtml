@@ -1,0 +1,240 @@
+﻿@model AccountViewModel
+
+@{
+    ViewData["Title"] = "Create Account";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header card-header-icon" data-background-color="green">
+                    Create new Account
+                </div>
+                <div class="card-content">
+
+                    <form method="post" role="form" asp-antiforgery="true" class="with-ajax">
+                        <div>
+                            @Html.HiddenFor(m => m.Id)
+                        </div>
+                        <div class="row mrgnTop30">
+                            <div class="col-sm-12">
+                                <div asp-validation-summary="ModelOnly"></div>
+                            </div>
+                        </div>
+                        <div class="col-sm-10">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group label-floating">
+                                        <label asp-for="Name" class="control-label"></label>
+                                        <input asp-for="Name" type="text" class="form-control">
+                                        <span asp-validation-for="Name" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group label-floating">
+                                        <label asp-for="OwnerId" class="control-label"></label>
+                                        <select asp-for="OwnerId" asp-items="Model.Users" class="form-control TypeaheadSelect">
+                                            <option>Select Account Owner</option>
+                                        </select>
+                                        <span asp-validation-for="OwnerId" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group label-floating">
+                                        <label asp-for="CityId" class="control-label"></label>
+                                        <select asp-for="CityId" class="form-control js-data-example-ajax">
+                                        </select>
+                                        <span asp-validation-for="CityId" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group label-floating">
+                                        <label asp-for="PartitionId" class="control-label"></label>
+                                        <select asp-for="PartitionId" asp-items="Model.Partitions" class="form-control TypeaheadSelect"></select>
+                                        <span asp-validation-for="PartitionId" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                @*<div class="col-md-6">
+                <div class="form-group label-floating">
+                    <label asp-for="StorageBucketName" class="control-label"></label>
+                    <select asp-for="StorageBucketName" asp-items="Model.Buckets" class="form-control"></select>
+                    <span asp-validation-for="StorageBucketName" class="text-danger"></span>
+                </div>
+            </div>*@
+                                <div class="col-md-6">
+                                    <div class="form-group label-floating">
+                                        <label asp-for="CitationWorkflow" class="control-label"></label>
+                                        <select asp-for="CitationWorkflow" asp-items="Model.CitationWorkflowItems" class="form-control"></select>
+                                        <span asp-validation-for="CitationWorkflow" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group label-floating">
+                                        <label asp-for="CitationCounter" class="control-label"></label>
+                                        <input asp-for="CitationCounter" type="text" class="form-control">
+                                        <span asp-validation-for="CitationCounter" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            @if (Model.AccViolationType.Count > 0)
+                            {
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <h4>Violation Type Offering</h4>
+                                        <hr/>
+                                    </div>
+                                </div>
+                            }
+
+                            <div class="row">
+                                @for (int i = 0; i < Model.AccViolationType.Count; i++)
+                                {
+                                    <div class="col-md-4">
+                                        <div class="form-group label-floating checkbox">
+                                            <label style="color:black">
+                                                <input type="checkbox" asp-for="@Model.AccViolationType[i].IsCheckedViolation">
+                                                @Model.AccViolationType[i].TypeName
+
+                                                <input type="hidden" asp-for="@Model.AccViolationType[i].TypeId">
+                                                <input type="hidden" asp-for="@Model.AccViolationType[i].TypeName">
+                                            </label>
+                                            <br />
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+
+                            <div class="row mt">
+                                <div class="col-md-12">
+                                    <h4>Features</h4>
+                                    <hr />
+                                </div>
+                            </div>
+                            <div class="row">
+                                @foreach (AccountFeatures permission in Enum.GetValues(typeof(AccountFeatures)))
+                                {
+                                    if (Model.Features.HasFlag(permission))
+                                    {
+
+                                        <div class="form-group col-sm-4 checkbox">
+                                            <label style="color:black">
+                                                <input type="checkbox" name="Features" checked="checked" value="@permission.ToString()" class="permission-checkbox permissionbox" />
+                                                @permission.GetName()
+                                            </label>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="form-group col-sm-4 checkbox">
+                                            <label  style="color:black">
+                                                <input type="checkbox" name="Features" value="@permission.ToString()" class="permission-checkbox permissionbox" />
+                                                @permission.GetName()
+                                            </label>
+                                        </div>
+                                    }
+
+                                }
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <button type="submit" class="btn btn-fill btn-rose">Save<div class="ripple-container"></div></button>
+                                    <a asp-controller="Accounts" asp-action="Cancel"> Cancel</a>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </form>
+
+                    <!-- end content-->
+                </div>
+                <!--  end card  -->
+            </div>
+            <!-- end col-md-12 -->
+        </div>
+        <!-- end row -->
+    </div>
+</div>
+
+@section scripts
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $('form').submit(function () {
+                if ($("#CityId").val() != null || $("#CityId").val() != undefined)
+                $.blockUI();
+            });
+
+            $('.TypeaheadSelect').select2();
+
+          var attendeeUrl1 = '@Url.Action("GetCities", "Accounts")';
+          var pageSize = 20;
+
+         $('.js-data-example-ajax').select2(
+            {
+                //Does the user have to enter any data before sending the ajax request
+                minimumInputLength: 0,
+                allowClear: true,
+                ajax: {
+                    //How long the user has to pause their typing before sending the next request
+                    quietMillis: 150,
+                    //The url of the json service
+                    url: attendeeUrl1,
+                    dataType: 'json',
+                    //Our search term and what page we are on
+                    data: function (params) {
+
+                        return {
+                            searchTerm: params.term, // search term
+                            pageNum: params.page,
+                            pageSize: pageSize
+                        };
+                    },
+                    processResults: function (data, params) {
+
+
+                        // parse the results into the format expected by Select2
+                        // since we are using custom formatting functions we do not need to
+                        // alter the remote JSON data, except to indicate that infinite
+                        // scrolling can be used
+                        params.page = params.page || 1;
+
+                        return {
+                            results: $.map(data.results, function (items) {
+
+                                return {
+                                    id: items.value,
+                                    text: items.text,
+                                }
+
+                            }),
+                            pagination: {
+                                more: (params.page * 30) < data.total
+                            }
+                        };
+                    },
+                    cache: true
+                },
+                escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+                minimumInputLength: 1
+                //templateResult: formatRepo, // omitted for brevity, see the source of this page
+               // templateSelection: formatRepoSelection // omitted for brevity, see the source of this page
+
+             });
+
+
+
+
+        });
+
+    </script>
+}
+
+

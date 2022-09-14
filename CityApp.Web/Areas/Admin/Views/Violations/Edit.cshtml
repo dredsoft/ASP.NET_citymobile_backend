@@ -1,0 +1,165 @@
+@model ViolationViewModel
+@{
+    ViewData["Title"] = "Edit violation";
+}
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header card-header-icon" data-background-color="green">
+                    Edit Violation
+                </div>
+                <div class="card-content">
+
+                    <form method="post" role="form" asp-antiforgery="true" class="with-ajax">
+                        <div>
+                            @Html.HiddenFor(m => m.Id)
+                        </div>
+                        <div class="row mrgnTop30">
+                            <div class="col-sm-12">
+                                <div asp-validation-summary="ModelOnly"></div>
+                            </div>
+                        </div>
+                        <div class="col-sm-10">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group label-floating">
+                                        <select asp-for="CategoryId" asp-items="Model.Categories" class="form-control">
+                                            <option value="">Select Category</option>
+                                        </select>
+                                        <span asp-validation-for="CategoryId" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group label-floating">
+                                        <label asp-for="Name" class="control-label"></label>
+                                        <input asp-for="Name" type="text" class="form-control">
+                                        <span asp-validation-for="Name" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group label-floating">
+                                        <label asp-for="HelpUrl" class="control-label"></label>
+                                        <input asp-for="HelpUrl" type="text" class="form-control">
+                                        <span asp-validation-for="HelpUrl" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group label-floating">
+                                        <label asp-for="Description" class="control-label"></label>
+                                        <textarea asp-for="Description" class="form-control"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group label-floating">
+                                        <label asp-for="ReminderMinutes" class="control-label"></label>
+                                        <input asp-for="ReminderMinutes" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group label-floating">
+                                        <label asp-for="ReminderMessage" class="control-label"></label>
+                                        <input asp-for="ReminderMessage" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <h4>Vendor Actions</h4>
+                                    <hr />
+                                </div>
+                            </div>
+                            <div class="row">
+                                @foreach (ViolationActions action in Enum.GetValues(typeof(ViolationActions)))
+                                {
+                                    if (Model.Actions.HasFlag(action))
+                                    {
+                                        <div class="form-group col-sm-3 togglebutton">
+                                            <label>
+                                                <input type="checkbox" name="Actions" checked="checked" value="@action.ToString()" class="permission-checkbox permissionbox" />
+                                                @action.GetName()
+                                            </label>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="form-group col-sm-3 togglebutton">
+                                            <label>
+                                                <input type="checkbox" name="Actions" value="@action.ToString()" class="permission-checkbox permissionbox" />
+                                                @action.GetName()
+                                            </label>
+                                        </div>
+
+                                    }
+                                }
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <h4>Required Fields</h4>
+                                    <hr />
+                                </div>
+                            </div>
+                            <div class="row">
+                                @foreach (ViolationRequiredFields field in Enum.GetValues(typeof(ViolationRequiredFields)))
+                                {
+                                    if (Model.Fields.HasFlag(field))
+                                    {
+                                        <div class="form-group col-sm-4 togglebutton">
+                                            <label>
+                                                <input type="checkbox" name="Fields" checked="checked" value="@field.ToString()" class="permission-checkbox permissionbox" />
+                                                @field.GetName()
+                                            </label>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="form-group col-sm-4 togglebutton">
+                                            <label>
+                                                <input type="checkbox" name="Fields" value="@field.ToString()" class="permission-checkbox permissionbox" />
+                                                @field.GetName()
+                                            </label>
+                                        </div>
+
+                                    }
+                                }
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group label-floating checkbox">
+                                        <label>
+                                            <input type="checkbox" asp-for="Disabled"> Disabled
+                                        </label>
+                                        <br />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <button type="submit" class="btn btn-fill btn-rose">Update<div class="ripple-container"></div></button>
+                                    <a asp-controller="Violations" asp-action="Cancel"> Cancel</a>
+                                </div>
+
+                            </div>
+                        </div>
+                    </form>
+
+                    <!-- end content-->
+                </div>
+                <!--  end card  -->
+            </div>
+            <!-- end col-md-12 -->
+        </div>
+        <!-- end row -->
+    </div>
+</div>
+

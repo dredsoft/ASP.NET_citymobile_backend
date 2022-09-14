@@ -1,0 +1,86 @@
+﻿@inject Microsoft.Extensions.Options.IOptions<AppSettings> AppSettings
+
+@model CitationListViewModel
+
+@{
+    ViewData["Title"] = "Citizen view";
+}
+
+<div class="container-fluid">
+    <h3>@ViewData["Title"]</h3>
+    <br>
+    <div class="row">
+        @if (Model.CitationList.Any())
+        {
+            @foreach (var account in Model.AccountList)
+            {
+
+                @foreach (var citation in Model.CitationList)
+                    {
+                    @if (account.AccountId == citation.AccountId)
+                    {
+                        <div class="col-md-4">
+                            <div class="card card-product" data-count="17">
+                                <div class="card-image">
+                                    <a asp-action="Citation" asp-controller="Citations" asp-route-id="@citation.Id" asp-route-accountNum="@account.Number">
+                                        @{var imagekey = citation.CitationAttachment.Where(x => x.AttachmentType == CitationAttachmentType.Image).FirstOrDefault();  }
+
+                                        @if (imagekey != null)
+                                        {
+                                            <img style="height:200px;" src="@Html.Raw(CityApp.Common.Utilities.AWSHelper.GetS3Url(imagekey.Key, AppSettings.Value.AmazonS3Url))" />
+                                        }
+                                        else
+                                        {
+
+                                            <div style="height: 200px;
+                                    width: 100%;
+                                    text-align: center;
+                                    vertical-align: middle;
+                                    line-height: 190px;
+                                    border-style: solid;
+                                    border-radius: 10px;
+                                    border-width: thin;
+                                    border-color: gray;
+                                    background-color: lightgrey;">
+                                                <span>No media available</span>
+                                            </div>
+
+                                        }
+
+                                    </a>
+                                    <div class="ripple-container"></div>
+                                </div>
+                                <div class="card-content">
+                                    <h4 class="card-title">
+                                        <a asp-action="Citation" asp-controller="Citations" asp-route-id="@citation.Id" asp-route-accountNum="@account.Number" class="pull-left">@citation.ViolationName</a>
+                                        <a asp-action="Citation" asp-controller="Citations" asp-route-id="@citation.Id" asp-route-accountNum="@account.Number" class="pull-right">@citation.CreateUtc.ToString("MM/dd/yyyy")</a>
+                                    </h4><br />
+
+                                    <div class="timeline-heading mrgnTop10">
+                                        <span class="label label-success">@citation.Status</span>
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <div class="price">
+                                        <h4>Citation: @citation.CitationNumber</h4>
+                                    </div>
+                                    <div class="stats pull-right">
+                                        <p class="category"><i class="material-icons">place</i> @citation.Street, @citation.State</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    }
+                }
+            }
+        }
+        else
+        {
+            <div class="col-md-4"><h2>No Ticket Created</h2></div>
+
+
+        }
+
+    </div>
+</div>

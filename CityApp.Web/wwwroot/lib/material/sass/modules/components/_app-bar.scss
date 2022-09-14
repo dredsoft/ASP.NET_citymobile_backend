@@ -1,0 +1,242 @@
+/*-- App Bar --*/
+#app-bar-wrapper {
+    position: relative;
+    height: 1.75 * $increment-keyline;
+    transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+        //colored
+    &.colored {
+        background-color: $brand-primary;
+        * {
+            background-color: $brand-primary;
+        }
+        .app-navigation.app-bar-nav .nav-list > .indicator {
+            background-color: #fff;
+        }
+        .app-title, i, .app-view-title, .app-navigation.app-bar-nav > nav > .nav-list > li {
+            color: #fff;
+            &.active {
+                color: #fff;
+            }
+        }
+    }
+    #app-bar-main, #app-bar-extension {
+        height: 1.75 * $increment-keyline;
+        line-height: 1.75 * $increment-keyline;
+    }
+    &.extended {
+        height: 4 * $increment-keyline;
+        #app-bar-extension {
+            height: 4 * $increment-keyline;
+            line-height: 4 * $increment-keyline;
+        }
+        .app-navigation.app-bar-nav {
+            transform: translateY(100%);
+            float: left;
+            height: 1.75 * $increment-keyline;
+        }
+        &.special {
+            .app-view-title {
+                display: block;
+                visibility: visible;
+                opacity: 1;
+                user-select: initial;
+                pointer-events: auto;
+            }
+        }
+    }
+    @media #{$medium-and-up} {
+        height: 2 * $increment-keyline;
+        #app-bar-main, #app-bar-extension {
+            height: 2 * $increment-keyline;
+            line-height: 2 * $increment-keyline;
+        }
+        &.extended {
+            height: 4 * $increment-keyline;
+            #app-bar-main, #app-bar-extension {
+                height: 4 * $increment-keyline;
+                line-height: 4 * $increment-keyline;
+            }
+            .app-navigation.app-bar-nav {
+                height: 2 * $increment-keyline;
+            }
+            &.special {
+                height: 8 * $increment-keyline;
+                #app-bar-main {
+                    height: 2 * $increment-keyline;
+                    line-height: 2 * $increment-keyline;
+                }
+                #app-bar-extension {
+                    height: 8 * $increment-keyline;
+                    line-height: 8 * $increment-keyline;
+                }
+                .app-navigation.app-bar-nav {
+                    transform: translateY(0);
+                    float: right;
+                }
+                .app-view-title {
+                    display: block;
+                    font-size: 56px;
+                    visibility: visible;
+                    opacity: 1;
+                    user-select: initial;
+                    pointer-events: auto;
+                    height: 6 * $increment-keyline;
+                    line-height: 6 * $increment-keyline;
+                }
+            }
+        }
+    }
+}
+
+#app-bar-main {
+    //default app-bar
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 0 $vertical-keyline;
+    overflow: hidden;
+    will-change: transform, height, color, background-color;
+    transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+    i {
+        width: 1.5 * $increment-keyline;
+        height: 1.5 * $increment-keyline;
+        line-height: 1.5 * $increment-keyline;
+        margin: $vertical-keyline 0;
+        text-align: center;
+    }
+    .app-navigation, .app-title, .app-view-title, .app-actions {
+        position: relative;
+        display: inline-block;
+        float: left;
+        height: 1.75 * $increment-keyline;
+        line-height: inherit;
+        background-color: inherit;
+    }
+    .app-navigation {
+        /*-- Left Side Nav --*/
+        &.left-side-nav {
+            @extend .mobile-only;
+            nav {
+                position: fixed;
+                width: calc(100% - 56px);
+                max-width: 320px;
+                top: 0;
+                left: -100%;
+                ul {
+                    @extend .lines-list;
+                }
+            }
+        }
+        /*-- App-Bar Nav --*/
+        &.app-bar-nav {
+            @extend .hide-on-small;
+            float: right;
+            margin-left: -$vertical-keyline;
+            //will-change: transform;
+            //transition: transform 0.28s 0.14s cubic-bezier(0.4, 0, 0.2, 1);
+            .nav-toggle {
+                @extend .overkill;
+            }
+            nav {
+                position: relative;
+                width: auto;
+                max-width: none;
+                bottom: 0;
+                left: auto;
+                ul {
+                    @extend .tabs-list;
+                    height: 1.75 * $increment-keyline;
+                    line-height: 1.75 * $increment-keyline;
+                    li {
+                        height: 1.75 * $increment-keyline;
+                        line-height: 1.75 * $increment-keyline;
+                    }
+                }
+            }
+        }
+    }
+    .app-title {
+        position: absolute;
+        @extend .title;
+        @extend .mono;
+        padding: 0 $vertical-sizing;
+        max-width: calc(100% - 200px);
+        //transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+   
+    }
+    .app-actions {
+        float: right;
+        overflow: hidden;
+        font-size: 0;
+        .app-supplemental-actions, .app-menu {
+            display: inline-block;
+            float: left;
+            height: 1.75 * $increment-keyline;
+            line-height: 1.75 * $increment-keyline;
+        }
+        //constrain supplemental actions to only 2
+        .app-supplemental-actions {
+            max-width: 3 * $increment-keyline;
+            overflow: hidden;
+        }
+    }
+}
+
+//on medium and larger displays
+@media #{$medium-and-up} {
+    #app-bar-main {
+        height: 2 * $increment-keyline;
+        padding: $horizontal-margin;
+        .bar-extension {}
+        .bar {}
+        i {
+            padding: $vertical-keyline 0;
+        }
+        .app-navigation, .app-title, .app-view-title, .app-actions {
+            height: 2 * $increment-keyline;
+        }
+        .app-navigation {
+            &.app-bar-nav {
+                nav {
+                    ul {
+                        height: 2 * $increment-keyline;
+                        line-height: 2 * $increment-keyline;
+                        li {
+                            height: 2 * $increment-keyline;
+                            line-height: 2 * $increment-keyline;
+                        }
+                    }
+                }
+            }
+        }
+        .app-title {
+            line-height: 2 * $increment-keyline;
+        }
+        .app-actions {
+            .app-supplemental-actions, .app-menu {
+                height: 2 * $increment-keyline;
+                line-height: 2 * $increment-keyline;
+            }
+        }
+    }
+}
+
+#app-bar-extension {
+    @extend #app-bar-main;
+    position: relative;
+    .app-view-title {
+        @extend .mono;
+        @extend .fade-in-up-long;
+        position: absolute;
+        padding-left: 3 * $vertical-keyline;
+        bottom: 0;
+        @extend .display2;
+        height: 2.25 * $increment-keyline;
+        line-height: 2.25 * $increment-keyline;
+        @extend .overkill;
+        display: none;
+        will-change: opacity;
+        transition: opacity .3s ease;
+    }
+}

@@ -1,0 +1,53 @@
+<div id="event-violation-pricing">
+    <div class="card">
+        <div class="card-content">
+
+            <div class="row">
+
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label class="control-label">Violation  {{violationId}}</label>
+                        <select v-model="violationId" class="form-control">
+                            <option value="">Select a Violation</option>
+                            <option v-for="option in violations" v-bind:value="option.Id">
+                                {{ option.Name }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-group ">
+                        <label id="lblQuestion" class="control-label">Fee</label>
+                        <input type="number" v-model="fee" class="form-control">
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <button type="button" id="btnAddQuestion" v-show="!isUpdate" class="btn btn-fill btn-rose" @@click="CreatePrice()">Add pricing<div class="ripple-container"></div></button>
+                </div>
+            </div>
+
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Violation</th>
+                        <th>Fee</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="pricing in eventPricing">
+                        <td>{{pricing.violation.name}}</td>
+                        <td>{{pricing.fee}}</td>
+                        <td><a href="#" class="btn btn-sm btn-danger" @@click="RemovePrice(pricing.id)" >remove</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+

@@ -1,0 +1,83 @@
+﻿@{
+    var controller = ViewContext.RouteData.Values["Controller"].ToString().ToLower();
+    var action = ViewContext.RouteData.Values["Action"].ToString().ToLower();
+}
+
+<div class="sidebar" data-active-color="blue" data-background-color="black" data-image="../images/sidebar-1.jpg">
+    <!--
+        Tip 1: You can change the color of active element of the sidebar using: data-active-color="purple | blue | green | orange | red | rose"
+        Tip 2: you can also add an image using data-image tag
+        Tip 3: you can change the color of the sidebar with data-background-color="white | black"
+    -->
+    <div class="logo">
+        <a href="/" class="simple-text">
+            <img src="~/images/Large Logo1.png" alt="Company Logo" />
+        </a>
+    </div>
+    <div class="logo logo-mini">
+        <a href="/" class="simple-text">
+            CA
+        </a>
+    </div>
+    <div class="sidebar-wrapper">
+        <ul class="nav">
+            <li class="@Html.Raw((controller == "accounts")? "active" : "")">
+                <a asp-action="Index" asp-controller="accounts" asp-area="@Area.Admin">
+                    <i class="material-icons">folder_shared</i>
+                    <p>Accounts</p>
+                </a>
+            </li>
+            <li class="@Html.Raw((controller == "users")? "active" : "")">
+                <a asp-action="Index" asp-controller="users" asp-area="@Area.Admin">
+                    <i class="material-icons">assignment_ind</i>
+                    <p>Users</p>
+                </a>
+            </li>
+            <li class="@Html.Raw((controller == "partitions")? "active" : "")">
+                <a asp-action="Index" asp-controller="partitions" asp-area="@Area.Admin">
+                    <i class="material-icons">storage</i>
+                    <p>Partitions </p>
+                </a>
+            </li>
+            <li class="@Html.Raw((controller == "violations")? "active" : "")">
+                <a data-toggle="collapse" href="#violations-menu-items">
+                    <i class="material-icons">warning</i>
+                    <p>Violations <b class="caret"></b></p>
+                </a>
+                <div class="collapse @Html.Raw((controller == "violations")? "in" : "")" id="violations-menu-items">
+                    <ul class="nav">
+                        <li class="@Html.Raw((controller == "violations" && ((action == "index") || action == "create" || action == "edit")) ? "active" : "")">
+                            <a asp-action="Index" asp-controller="violations" asp-area="@Area.Admin">Violations</a>
+                        </li>
+                        <li class="@Html.Raw((controller == "violations" && ((action == "categories")|| action == "createcategory" || action == "editcategory"))? "active" : "")">
+                            <a asp-action="Categories" asp-controller="violations" asp-area="@Area.Admin">Categories</a>
+                        </li>
+                        <li class="@Html.Raw((controller == "violations" && ((action == "types")|| action == "createtype" || action == "edittype"))? "active" : "")">
+                            <a asp-action="Types" asp-controller="violations" asp-area="@Area.Admin">Types</a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+            <li class="@Html.Raw((controller == "citationreceipt")? "active" : "")">
+                <a asp-action="Index" asp-controller="CitationReceipt" asp-area="@Area.Admin">
+                    <i class="material-icons">receipt</i>
+                    <p>Citation Receipt </p>
+                </a>
+            </li>
+            <li class="@Html.Raw((controller == "city")? "active" : "")">
+                <a asp-action="Index" asp-controller="city" asp-area="@Area.Admin">
+                    <i class="material-icons">location_on</i>
+                    <p>City</p>
+                </a>
+            </li>
+            <li class="@Html.Raw((controller == "city")? "active" : "")">
+                <a asp-action="Index" asp-controller="Citations" asp-area="@Area.Admin">
+                    <i class="material-icons">content_paste</i>
+                    <p>Citations</p>
+                </a>
+            </li>
+
+            
+        </ul>
+    </div>
+</div>

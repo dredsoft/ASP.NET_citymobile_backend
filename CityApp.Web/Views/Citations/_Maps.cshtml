@@ -1,0 +1,10 @@
+@model CitationViolationListItem
+    <div class="row">
+        <div class="col-xs-6">
+            <a target="_blank" href="https://www.google.com/maps/?q=@Model.Latitude,@Model.Longitude">  @Model.LocationDescription</a>
+</div>
+        <div class="col-xs-6 text-right">
+            <a target="_blank" href="https://www.google.com/maps/?q=@Model.Latitude,@Model.Longitude">  <span>Latitude: @Model.Latitude.ToString("G29")</span> <span>Longitude: @Model.Longitude.ToString("G29")</span></a>
+        </div>
+    </div>
+<div id="map" style="height:500px;width:100%"></div>

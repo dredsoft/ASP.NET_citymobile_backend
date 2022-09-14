@@ -1,0 +1,113 @@
+@model EventViewModel
+@{
+    ViewData["Title"] = "Create Event";
+    Layout = "~/Views/Shared/_InternalLayout.cshtml";
+}
+
+@section styles
+{
+
+    <!-- include libraries(jQuery, bootstrap) -->
+    <!-- include codemirror (codemirror.css, codemirror.js, xml.js, formatting.js) -->
+    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/codemirror.css">
+    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/theme/monokai.css">
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/codemirror.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/mode/xml/xml.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/codemirror/2.36.0/formatting.js"></script>
+    <link href="~/lib/summernote/dist/summernote.css" rel="stylesheet" asp-append-version="true" />
+    <style>
+        .modal-backdrop {
+            position: static !important;
+        }
+    </style>
+
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header card-header-icon" data-background-color="green">
+                    @ViewData["Title"]
+                </div>
+                <div class="card-content">
+                    <form method="post" role="form" asp-antiforgery="true">
+                        @Html.HiddenFor(m => m.Body)
+                        <div class="row mrgnTop30">
+                            <div class="col-sm-12">
+                                <div asp-validation-summary="ModelOnly"></div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group label-floating">
+                                        <label asp-for="Title" class="control-label"></label>
+                                        <input asp-for="Title" type="text" class="form-control">
+                                        <span asp-validation-for="Title" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="Start" class="control-label"></label>
+                                        <input asp-for="Start" type="text" class="form-control datetimepicker">
+                                        <span asp-validation-for="Start" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="End" class="control-label"></label>
+                                        <input asp-for="End" type="text" class="form-control datetimepicker">
+                                        <span asp-validation-for="End" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row pt-lg">
+                                <div class="col-md-12">
+                                    <div class="form-group label-floating" id="editor">
+                                    </div>
+                                    <span asp-validation-for="Body" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <button type="submit" id="submit" class="btn btn-fill btn-rose">Save</button>
+                                    <a asp-route-action="Events" asp-route-controller="AccountSettings"> Cancel</a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+
+                    <!-- end content-->
+                </div>
+                <!--  end card  -->
+            </div>
+            <!-- end col-md-12 -->
+        </div>
+        <!-- end row -->
+    </div>
+</div>
+
+
+@section scripts
+{
+
+
+    <environment names="@EnvironmentNames.DEVELOPMENT">
+
+        <script src="~/lib/summernote/dist/summernote.js" asp-append-version="true"></script>
+        <script src="~/js/Event/Event.js" asp-append-version="true"></script>
+    </environment>
+
+    <environment names="@EnvironmentNames.NOT_DEVELOPMENT">
+        <script src="~/lib/summernote/dist/summernote.min.js" asp-append-version="true"></script>
+        <script src="~/js/Event/Event.min.js" asp-append-version="true"></script>
+    </environment>
+
+
+}
+

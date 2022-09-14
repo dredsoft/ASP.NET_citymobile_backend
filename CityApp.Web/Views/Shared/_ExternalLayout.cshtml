@@ -1,0 +1,96 @@
+﻿@inject Microsoft.AspNetCore.Hosting.IHostingEnvironment HostingEnvironment
+@{
+    var title = string.IsNullOrWhiteSpace(ViewData[ViewDataKey.Title] as string) ? "City App" : ViewData[ViewDataKey.Title] + " - City App";
+    var controller = ViewContext.RouteData.Values["Controller"].ToString().ToLower();
+    var action = ViewContext.RouteData.Values["Action"].ToString().ToLower();
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="shortcut icon" href="~/images/Large Logo1.png" type="image/x-icon">
+    <title>@title</title>
+
+    @Html.Partial("_CommonStyles")
+
+    <environment names="@EnvironmentNames.DEVELOPMENT">
+    </environment>
+    <environment names="@EnvironmentNames.NOT_DEVELOPMENT">
+    </environment>
+
+    @RenderSection("styles", required: false)
+
+    @Html.Partial("_CommonScripts")
+
+    <environment names="@EnvironmentNames.DEVELOPMENT">
+    </environment>
+    <environment names="@EnvironmentNames.NOT_DEVELOPMENT">
+    </environment>
+
+    @RenderSection("scripts", required: false)
+</head>
+
+<body>
+    <nav class="navbar navbar-primary navbar-transparent navbar-absolute register-nav">
+        <div class="container">
+            <div class="navbar-header">
+                <div class="logo">
+                    <a class="navbar-brand" href="javascript:;">
+                        <img src="~/images/Large Logo1.png" alt="Company Logo"
+                             asp-append-version="true" />
+                    </a>
+                </div>
+            </div>
+            <div class=" navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    @if (string.Equals(action, "login"))
+                    {
+                        <li class="">
+                            <a asp-action="Register" asp-controller="User">
+                                <i class="material-icons">person_add</i> Register
+                            </a>
+                        </li>
+                    }
+                    else if(string.Equals(action, "termcondition"))
+                    {
+                    <li class="">
+                        <a asp-action="Register" asp-controller="User">
+                            <i class="material-icons">person_add</i> Register
+                        </a>
+                    </li>
+
+                    }
+                    else
+                    {
+                    <li class="">
+                        <a asp-action="Login" asp-controller="User">
+                            <i class="material-icons">person_add</i> Login
+                        </a>
+                    </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="wrapper wrapper-full-page">
+        <div class="full-page login-page" filter-color="black" data-image="/images/t2tell_bg.jpg">
+            <!--   you can change the color of the filter page using: data-color="blue | purple | green | orange | red | rose " -->
+            <div class="content register-content">
+                @RenderBody()
+            </div>
+            @Html.Partial("_Footer")
+        </div>
+    </div>
+    <script type="text/javascript">
+        $page = $('.full-page');
+        image_src = $page.data('image');
+
+        if (image_src !== undefined) {
+            image_container = '<div class="full-page-background" style="background-image: url(' + image_src + ') "/>'
+            $page.append(image_container);
+        }
+    </script>
+</body>
+</html>

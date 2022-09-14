@@ -1,0 +1,143 @@
+﻿@inject IAuthorizationService AuthorizationService
+
+@{
+    var controller = ViewContext.RouteData.Values["Controller"].ToString().ToLower();
+    var action = ViewContext.RouteData.Values["Action"].ToString().ToLower();
+    var globalViewData = (GlobalViewDataModel)ViewData[ViewDataKey.GlobalViewData];
+
+    var isAccountSpecificPage = (globalViewData != null) && (!string.IsNullOrWhiteSpace(globalViewData.AccountName));
+
+    var isAccountAdministrator = globalViewData?.Permissions?.HasFlag(AccountPermissions.AccountAdministrator);
+
+    var isCitationRead = globalViewData?.Permissions?.HasFlag(AccountPermissions.CitationEdit);
+
+    var loggedInUser = (LoggedInUser)ViewData[ViewDataKey.LoggedInUser];
+
+}
+
+<div class="sidebar" data-active-color="blue" data-background-color="black" data-image="../images/sidebar-1.jpg">
+    <!--
+        Tip 1: You can change the color of active element of the sidebar using: data-active-color="purple | blue | green | orange | red | rose"
+        Tip 2: you can also add an image using data-image tag
+        Tip 3: you can change the color of the sidebar with data-background-color="white | black"
+    -->
+    <div class="logo">
+        <a href="/" class="simple-text">
+            <img src="~/images/Large Logo1.png" alt="Company Logo" />
+        </a>
+    </div>
+    <div class="logo logo-mini">
+        <a href="/" class="simple-text">
+            CA
+        </a>
+    </div>
+    <div class="sidebar-wrapper">
+        @if (isAccountSpecificPage)
+        {
+            <ul id="sidebarNav" class="nav">
+                <li>
+                    <a asp-route-action="Index" asp-route-controller="Home">
+                        <i class="material-icons">timeline</i>
+                        <p>Dashboard</p>
+                    </a>
+                </li>
+                @if (isCitationRead == true)
+                {
+                    <li class="@Html.Raw((controller == "citations") ? "active" : "")">
+                        <a data-toggle="collapse" href="#pagesExamples">
+                            <i class="material-icons">content_paste</i>
+                            <p>
+                                Citations
+                                <b class="caret"></b>
+                            </p>
+                        </a>
+                        <div class="collapse @Html.Raw((controller == "citations")? "in" : "")" id="pagesExamples">
+                            <ul class="nav">
+                                <li class="nav @Html.Raw((controller == "citations" && action == "Index") ? "active" : "")">
+                                    <a asp-route-action="Index" asp-route-controller="Citations" asp-route-AssignedToId="@loggedInUser.Id" asp-route-Title="Assigned to Me">Assigned to Me</a>
+                                </li>
+                                <li class="nav @Html.Raw((controller == "citations" && action == "Index") ? "active" : "")">
+                                    <a asp-route-action="Index" asp-route-controller="Citations" asp-route-StatusId="@CitationStatus.Open" asp-route-Title="Open Citations">Open</a>
+                                </li>
+                                <li class="nav @Html.Raw((controller == "citations" && action == "Index") ? "active" : "")">
+                                    <a asp-route-action="Index" asp-route-controller="Citations" asp-route-StatusId="@CitationStatus.InReview" asp-route-Title="Citations In Review">@CitationStatus.InReview.GetEnumName()</a>
+                                </li>
+                                <li class="nav @Html.Raw((controller == "citations" && action == "Index") ? "active" : "")">
+                                    <a asp-route-action="Index" asp-route-controller="Citations" asp-route-StatusId="@CitationStatus.Contested" asp-route-Title="Contested">@CitationStatus.Contested.GetEnumName()</a>
+                                </li>
+                                <li class="nav @Html.Raw((controller == "citations" && action == "Index") ? "active" : "")">
+                                    <a asp-route-action="Status" asp-route-controller="Citations" asp-route-StatusId="@CitationStatus.InReview" asp-route-Title="General Status">Status</a>
+                                </li>
+                                <li class="nav @Html.Raw((controller == "citations" && action == "Index") ? "active" : "")">
+                                    <a asp-route-action="Index" asp-route-controller="Citations">All</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                }
+                @if (isAccountAdministrator == true)
+                {
+                    <li class="@Html.Raw((controller == "accountsettings" && action == "violations")? "active" : "")">
+                        <a asp-route-action="Violations" asp-route-controller="AccountSettings" asp-route="Account" asp-route-AccountNum="@globalViewData.AccountNumber">
+                            <i class="material-icons">warning</i>
+                            <p>Violations</p>
+                        </a>
+                    </li>
+                    <li class="@Html.Raw((controller == "accountsettings" && action == "users")? "active" : "")">
+                        <a asp-route-action="Users" asp-route-controller="AccountSettings" asp-route="Account" asp-route-AccountNum="@globalViewData.AccountNumber">
+                            <i class="material-icons">account_circle</i>
+                            <p>Users</p>
+                        </a>
+                    </li>
+
+                    @*<li class="@Html.Raw((controller == "vendors") ? "active" : "")">
+                        <a asp-route-action="Index" asp-route-controller="Vendors" asp-route="Account" asp-route-AccountNum="@globalViewData.AccountNumber">
+                            <i class="material-icons">build</i>
+                            <p>Vendors</p>
+                        </a>
+                    </li>
+                    <li class="@Html.Raw((controller == "vendors") ? "active" : "")">
+                        <a asp-route-action="Index" asp-route-controller="Vendors" asp-route="Account" asp-route-AccountNum="@globalViewData.AccountNumber">
+                            <i class="material-icons">account_balance</i>
+                            <p>Departments</p>
+                        </a>
+                    </li>*@
+
+                    @if (globalViewData.Features.HasFlag(AccountFeatures.Info))
+                    {
+                        <li class="@Html.Raw((controller == "events" ) ? "active" : "")">
+                            <a asp-route-action="index" asp-route-controller="events" asp-route="Account" asp-route-AccountNum="@globalViewData.AccountNumber">
+                                <i class="material-icons">event</i>
+                                <p>Events</p>
+                            </a>
+                        </li>
+                    }
+
+                    if (globalViewData.OwnerUserId == loggedInUser.Id)
+                    {
+                        <li class="@Html.Raw((controller == "accountsettings" && action == "Info") ? "active" : "")">
+                            <a asp-route-action="Info" asp-route-controller="AccountSettings" asp-route="Account" asp-route-AccountNum="@globalViewData.AccountNumber">
+                                <i class="material-icons">settings</i>
+                                <p>Settings</p>
+                            </a>
+                        </li>
+                    }
+
+
+
+                }
+
+
+                @if (User.IsInRole(SystemPermission.Administrator))
+                {
+                    <li>
+                        <a asp-action="Index" asp-controller="Accounts" asp-area="@Area.Admin">
+                            <i class="material-icons">lock_open</i>
+                            <p>Admin</p>
+                        </a>
+                    </li>
+                }
+            </ul>
+        }
+    </div>
+</div>

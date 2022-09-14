@@ -1,0 +1,70 @@
+﻿@model ViolationTypeViewModel
+
+@{
+    ViewData["Title"] = "Edit Violation Type";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header card-header-icon" data-background-color="green">
+                    Edit Violation Type
+                </div>
+                <div class="card-content">
+
+                    <form method="post" role="form" asp-antiforgery="true" class="with-ajax">
+                        <div>
+                            @Html.HiddenFor(m => m.Id)
+                        </div>
+                        <div class="row mrgnTop30">
+                            <div class="col-sm-12">
+                                <div asp-validation-summary="ModelOnly"></div>
+                            </div>
+                        </div>
+                        <div class="col-sm-10">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group label-floating">
+                                        <label asp-for="Name" class="control-label"></label>
+                                        <input asp-for="Name" type="text" class="form-control">
+                                        <span asp-validation-for="Name" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group label-floating">
+                                        <label asp-for="Description" class="control-label"></label>
+                                        <textarea asp-for="Description" class="form-control"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group label-floating checkbox">
+                                        <label>
+                                            <input type="checkbox" asp-for="Disabled"> Disabled
+                                        </label>
+                                        <br />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <button type="submit" class="btn btn-fill btn-rose">Update<div class="ripple-container"></div></button>
+                                    <a asp-controller="Violations" asp-action="CancelType"> Cancel</a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <!-- end content-->
+                </div>
+                <!--  end card  -->
+            </div>
+            <!-- end col-md-12 -->
+        </div>
+        <!-- end row -->
+    </div>
+</div>
+

@@ -1,0 +1,141 @@
+//Variables
+
+@import url(http://fonts.googleapis.com/css?family=Roboto+Mono:400,100italic,100,300,300italic,400italic,500,500italic,700,700italic|Roboto:400,100,300,100italic,300italic,400italic,500italic,500,700,700italic,900,900italic);
+
+$roboto-font-path: "fonts/roboto/" !default;
+$roboto-mono-font-path: "fonts/roboto-mono/" !default;
+$noto-font-path: "fonts/noto-sans/" !default;
+$icons-font-path: "fonts/material-design-icons/" !default;
+
+$thin: 100 !default;
+$light: 300 !default;
+$regular: 400 !default;
+$medium: 500 !default;
+$bold: 700 !default;
+$black: 900 !default;
+
+
+html {
+	font-family: "Roboto","Noto", sans-serif;
+	font-size: 14px;
+	font-weight: $regular;
+    @extend .primary-text-color;
+}
+
+*{
+    @extend .primary-text-color;
+}
+
+.single-line{
+    overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.mono{
+    font-family: "Roboto Mono", "Roboto", "Noto", sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6, p, span {
+	font-size: 14px;
+	font-family: "Roboto","Noto", sans-serif;
+	font-weight: $regular;
+	font-kerning: auto;
+	font-stretch: normal;
+	font-style: normal;
+	font-variant: normal;
+	font-variant-ligatures: normal;
+	margin: 0;
+	padding: 0;
+}
+
+.display4 {
+    @extend .mono;
+	font-size: 112px;
+	font-weight: $light;
+	text-indent: -12px;
+    @extend .single-line;
+    @extend .secondary-text-color;
+}
+
+.display3 {
+    @extend .mono;
+	font-size: 56px;
+	font-weight: $regular;
+	text-indent: -4px;
+    @extend .single-line;
+    @extend .secondary-text-color;
+}
+
+.display2 {
+    @extend .mono;
+	font-size: 45px;
+	line-height: 48px;
+	font-weight: $regular;
+	text-indent: -4px;
+    @extend .secondary-text-color;
+}
+
+.display1 {
+    @extend .mono;
+	font-size: 34px;
+	line-height: 40px;
+	font-weight: $regular;
+	text-indent: -2px;
+    @extend .secondary-text-color;
+}
+
+.headline {
+	font-size: 24px;
+	line-height: 32px;
+	font-weight: $regular;
+	text-indent: -2px;
+    @extend .primary-text-color;
+}
+
+.title {
+	font-size: 20px;
+	line-height: 24px;
+	font-weight: $medium;
+    @extend .single-line;
+    @extend .primary-text-color;
+}
+
+.subhead {
+	font-size: 16px;
+	line-height: 24px;
+	font-weight: $medium;
+    @extend .primary-text-color;
+}
+
+.body2 {
+	font-size: 14px;
+	line-height: 24px;
+	font-weight: $medium;
+    @extend .primary-text-color;
+}
+
+.body1 {
+	font-size: 14px;
+	line-height: 20px;
+	font-weight: $regular;
+    @extend .primary-text-color;
+}
+
+.caption {
+	font-size: 12px;
+    @extend .single-line;
+    @extend .secondary-text-color;
+}
+
+button {
+	font-size: 14px;
+	font-weight: $medium;
+	text-transform: uppercase;
+    @extend .single-line;
+    @extend .primary-text-color;
+}
+
+i{
+    @extend .icon-color;
+}

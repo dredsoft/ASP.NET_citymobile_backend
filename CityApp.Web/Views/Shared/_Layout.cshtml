@@ -1,0 +1,55 @@
+﻿@inject Microsoft.AspNetCore.Hosting.IHostingEnvironment HostingEnvironment
+@{
+    var title = string.IsNullOrWhiteSpace(ViewData[ViewDataKey.Title] as string) ? "City App" : ViewData[ViewDataKey.Title] + " - City App";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    @Html.Partial("_gTag")
+    <meta charset="utf-8" />
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="shortcut icon" href="~/images/Large Logo1.png" type="image/x-icon">
+    <title>@title</title>
+   
+
+    @Html.Partial("_CommonStyles")
+
+    <environment names="@EnvironmentNames.DEVELOPMENT">
+    </environment>
+    <environment names="@EnvironmentNames.NOT_DEVELOPMENT">
+    </environment>
+
+    @RenderSection("styles", required: false)
+
+
+</head>
+
+<body>
+    <div class="wrapper">
+        @RenderSection("sidebar", required: false)
+        <div class="main-panel">
+            @RenderSection("headerNavigation", required: false)
+            <div class="content">
+                @RenderBody()
+            </div>
+            @Html.Partial("_Footer")
+        </div>
+    </div>
+
+   
+    @Html.Partial("_CommonScripts")
+
+    <environment names="@EnvironmentNames.DEVELOPMENT">
+    </environment>
+    <environment names="@EnvironmentNames.NOT_DEVELOPMENT">
+    </environment>
+    <script type="text/javascript">
+
+    </script>
+
+    @RenderSection("scripts", required: false)
+</body>
+
+
+</html>

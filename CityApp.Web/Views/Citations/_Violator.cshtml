@@ -1,0 +1,85 @@
+@model CitationViolationListItem
+@{
+    var globalViewData = (GlobalViewDataModel)ViewData[ViewDataKey.GlobalViewData];
+
+    var attachments = Model.CitationAttachment.Where(m => m.AttachmentType == CitationAttachmentType.File).OrderByDescending(m => m.CreatedDate);
+
+
+}
+<div>
+    @Html.HiddenFor(m => m.Id)
+</div>
+<form class="with-loader violator-forms" method="post" asp-action="SaveViolator" asp-controller="Citations" enctype="multipart/form-data" asp-route-id="@Model.Id">
+    <fieldset>
+        <legend>Edit Violator</legend>
+        <div class="col-sm-10">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group label-floating">
+                        <label asp-for="ViolatorFirstName" class="control-label"></label>
+                        <input asp-for="ViolatorFirstName" type="text" class="form-control">
+                        <span asp-validation-for="ViolatorFirstName" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group label-floating">
+                        <label asp-for="ViolatorLastName" class="control-label"></label>
+                        <input asp-for="ViolatorLastName" type="text" class="form-control">
+                        <span asp-validation-for="ViolatorLastName" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group label-floating">
+                        <label asp-for="ViolatorAddress1" class="control-label"></label>
+                        <input asp-for="ViolatorAddress1" type="text" class="form-control">
+                        <span asp-validation-for="ViolatorAddress1" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group label-floating">
+                        <label asp-for="ViolatorAddress2" class="control-label"></label>
+                        <input asp-for="ViolatorAddress2" type="text" class="form-control">
+                        <span asp-validation-for="ViolatorAddress2" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group label-floating">
+                        <label asp-for="ViolatorCity" class="control-label"></label>
+                        <input asp-for="ViolatorCity" type="text" class="form-control">
+                        <span asp-validation-for="ViolatorCity" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group label-floating">
+                        <label asp-for="ViolatorState" class="control-label"></label>
+                        <input asp-for="ViolatorState" type="text" class="form-control">
+                        <span asp-validation-for="ViolatorState" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group label-floating">
+                        <label asp-for="ViolatorZip" class="control-label"></label>
+                        <input asp-for="ViolatorZip" type="text" class="form-control">
+                        <span asp-validation-for="ViolatorZip" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group label-floating">
+                        <label asp-for="ViolatorCountry" class="control-label"></label>
+                        <input asp-for="ViolatorCountry" type="text" class="form-control">
+                        <span asp-validation-for="ViolatorCountry" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <button type="submit" class="btn btn-fill btn-rose">Update</button>
+            </div>
+        </div>
+    </fieldset>
+
+</form>
+

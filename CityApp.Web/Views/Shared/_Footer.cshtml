@@ -1,0 +1,16 @@
+﻿@{
+    var controller = ViewContext.RouteData.Values["Controller"].ToString().ToLower();
+    var action = ViewContext.RouteData.Values["Action"].ToString().ToLower();
+}
+
+<footer class="footer">
+    <div class="container-fluid">
+        <p class="copyright pull-right">
+            &copy;
+            <script>
+                            document.write(new Date().getFullYear())
+            </script>
+            <a href="https://www.govappsolutions.com">Gov App Solutions</a>
+        </p>
+    </div>
+</footer>

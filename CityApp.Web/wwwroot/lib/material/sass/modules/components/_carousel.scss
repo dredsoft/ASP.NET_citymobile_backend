@@ -1,0 +1,195 @@
+.c-max {
+    max-width: 960px;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    display: block;
+}
+
+.carousel {
+    position: relative;
+    overflow: hidden;
+    user-select: none;
+    -webkit-touch-callout: none;
+    transition: 0.2s opacity;
+    &:hover {
+        cursor: default;
+    }
+    .carousel-title {
+        @extend .off-screen;
+    }
+    .carousel-controls {
+        position: absolute;
+        width: 100%;
+        height: 3 * $increment-keyline;
+        padding: $horizontal-margin;
+        bottom: 0;
+        overflow: hidden;
+        user-select: none;
+        -webkit-touch-callout: none;
+        .prev, .pager, .next {
+            min-width: 0;
+            padding: 0;
+            margin: 0;
+            display: inline-block;
+            height: 3 * $increment-keyline;
+            line-height: 3 * $increment-keyline;
+        }
+        .pager {
+            position: absolute;
+            margin: auto;
+            left: 0;
+            right: 0;
+            z-index: 2;
+            text-align: center;
+            button {
+                min-width: 0;
+            }
+            .pager-dot {
+                display: inline-block;
+                vertical-align: middle;
+                width: 11px;
+                height: 11px;
+                margin: 0 -1px;
+                opacity: 0.7;
+                font-size: 0;
+                position: relative;
+                cursor: pointer;
+                padding: 12px;
+                background: transparent;
+                &.is-current {
+                    .pager-dot-inner {
+                        transform: scale(1);
+                        transition: all 0.2s ease-out;
+                        transition-delay: 0.2s;
+                        opacity: 1 !important;
+                    }
+                }
+                .pager-dot-inner {
+                    transition: all 0.2s ease-out;
+                    position: absolute;
+                    -webkit-transform: scale(0);
+                    transform: scale(0);
+                    width: 9px;
+                    height: 9px;
+                    top: 8px;
+                    left: 8px;
+                    border-radius: 10px;
+                    background: #000;
+                }
+                &:before {
+                    content: "";
+                    width: 7px;
+                    height: 7px;
+                    position: absolute;
+                    top: 7px;
+                    left: 7px;
+                    border: 2px solid #000;
+                    border-radius: 10px;
+                    box-sizing: content-box;
+                    border-color: #000;
+                    transition: all 0.3s ease-out;
+                }
+                &:first-child {
+                    margin-left: 0;
+                }
+                &:last-child {
+                    margin-right: 0;
+                }
+                &:focus,
+                &:hover {
+                    outline: none;
+                    .pager-dot-inner {
+                        transform: scale(1);
+                        opacity: 0.4;
+                    }
+                }
+            }
+        }
+        .prev,
+        .next {
+            display: block;
+            z-index: 3;
+            border: 0;
+            margin: 0;
+            padding: 0;
+            width: 36px;
+            background: transparent;
+            font-weight: 700;
+            font-size: 24px;
+            background-repeat: no-repeat;
+            background-position: center center;
+            cursor: pointer;
+            bottom: auto;
+            svg {
+                width: 100%;
+                height: 100%;
+                .fill-color {
+                    transition: fill 0.3s ease-out;
+                    fill: #000;
+                }
+            }
+            &:focus {
+                outline: none;
+                border-radius: 2px;
+            }
+            &.disabled {
+                opacity: 0.1;
+                cursor: default;
+            }
+        }
+        .prev {
+            float: left;
+        }
+        .next {
+            float: right;
+        }
+        &.light {
+            .prev, .pager, .next {
+                svg {
+                    .fill-color {
+                        fill: #000;
+                    }
+                }
+                .pager-dot:before{
+                    border-color: #000;
+                }
+                .pager-dot-inner{
+                    background: #000;
+                }
+            }
+        }
+        &.dark {
+            .prev, .pager, .next {
+                svg {
+                    .fill-color {
+                        fill: #fff;
+                    }
+                }
+                .pager-dot:before{
+                    border-color: #fff;
+                }
+                .pager-dot-inner{
+                    background: #fff;
+                }
+            }
+        }
+    }
+    .carousel-slideshow {
+        display: block;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        font-size: 0;
+        will-change: left;
+        transition: transform 0.58s cubic-bezier(0, 0, 0.2, 1);
+        .slide {
+            position: absolute;
+            display: inline-block;
+            width: 100%;
+            height: 100%;
+            float: left;
+            img {}
+        }
+    }
+}

@@ -1,0 +1,13 @@
+$brand-primary: color("teal", "base") !default;
+$brand-primary-accent: color("teal", "accent-4") !default;
+$brand-secondary: color("grey", "base") !default;
+$brand-secondary-accent: color("grey", "lighten-1") !default;
+$brand-third: color("grey", "base") !default;
+$brand-third-accent: color("grey", "lighten-1") !default;
+
+&.colored {
+    background-color: $brand-primary;
+    i {
+        color: #fff;
+    }
+}

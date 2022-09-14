@@ -1,0 +1,38 @@
+{
+  "name": "material",
+  "version": "0.1.0",
+  "homepage": "http://wearska.com/",
+  "authors": [
+    "Ionut Achim"
+  ],
+  "description": "A modern responsive front-end framework based on Material Design",
+  "main": [
+    "style.css",
+    "js/material.js"
+  ],
+  "moduleType": [
+    "globals"
+  ],
+  "keywords": [
+    "css",
+    "js",
+    "sass",
+    "mobile-first",
+    "responsive",
+    "front-end",
+    "framework",
+    "ux",
+    "material",
+    "design",
+    "paper",
+    "google"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

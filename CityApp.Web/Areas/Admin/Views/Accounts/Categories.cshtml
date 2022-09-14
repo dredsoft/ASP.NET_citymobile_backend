@@ -1,0 +1,97 @@
+@model AccountCategoryIndexViewModel
+@{
+    ViewData["Title"] = "Account Categories";
+}
+
+<div class="container-fluid">
+    <div class="card-header card-header-tabs" data-background-color="green">
+        <div class="nav-tabs-navigation">
+            <div class="nav-tabs-wrapper">
+                <ul class="nav nav-tabs" data-tabs="tabs">
+
+                    <li class="">
+                        <a asp-area="admin" asp-action="Violations" asp-controller="Accounts" asp-route-accountId="@Model.AccountId">
+                            Violatoins
+                        </a>
+
+                    </li>
+                    <li class="active">
+                        <a asp-area="admin" asp-action="Categories" asp-controller="Accounts" asp-route-accountId="@Model.AccountId">
+                            Categories
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header card-header-icon" data-background-color="green">
+                    <i class="material-icons">warning</i>
+                </div>
+                <div class="card-content clearfix">
+                    <h4 class="card-title pull-left">
+                        @ViewData["Title"]
+                    </h4>
+                    <!--  Here you can write extra buttons/actions for the toolbar   -->
+                    <a asp-area="admin" asp-action="CreateCategory" asp-controller="Accounts" asp-route-accountId="@Model.Account.Id" class="btn btn-info fltrght btn-addcl pull-right">
+
+                        <span class="btn-label">
+                            <i class="material-icons">add</i>
+                        </span>
+                        Create New Category<div class="ripple-container"></div>
+                    </a>
+                    <div class="toolbar cl-addbtn-outer">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <!--        Here you can write extra buttons/actions for the toolbar              -->
+                                <label>City of @Model.Account.Name</label>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="material-datatables responsivetable">
+                        <table id="datatables" class="table table-striped table-no-bordered table-hover" cellspacing="0" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Name
+                                    </th>
+                                    <th>
+                                        Type
+                                    </th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @foreach (var violation in Model.Categories)
+                                {
+                                    <tr>
+                                        <td>
+                                            <a asp-area="admin" asp-action="EditCategory" asp-controller="Accounts" asp-route-accountId="@Model.Account.Id" asp-route-id="@violation.Id" >
+                                                @violation.Name
+                                            </a>
+                                        </td>
+                                        <td>
+                                            @violation.Type.Name
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- end content-->
+            </div>
+            <!--  end card  -->
+        </div>
+        <!-- end col-md-12 -->
+    </div>
+    <!-- end row -->
+</div>
+@section scripts
+{
+}

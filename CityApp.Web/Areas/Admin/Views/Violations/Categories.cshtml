@@ -1,0 +1,165 @@
+@model ViolationCategoryListViewModel
+@{
+    ViewData["Title"] = "Categories";
+
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+
+            <div class="card-header card-header-tabs" data-background-color="green">
+                <div class="nav-tabs-navigation">
+                    <div class="nav-tabs-wrapper">
+                        <span class="nav-tabs-title">Issues:</span>
+                        <ul class="nav nav-tabs" data-tabs="tabs">
+
+                            <li >
+                                <a>
+                                    Violatoins
+                                </a>
+                            </li>
+                            <li class="active">
+                                <a>
+                                    Categories
+                                </a>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header card-header-icon" data-background-color="green">
+                    <i class="material-icons">warning</i>
+                </div>
+                <div class="card-content clearfix">
+                    <h4 class="card-title pull-left">
+                        @ViewData["Title"]
+                    </h4>
+                    <a asp-area="admin" asp-action="CreateCategory" asp-controller="Violations" class="btn btn-info fltrght btn-addcl">
+
+                        <span class="btn-label">
+                            <i class="material-icons">add</i>
+                        </span>
+                        Add Category<div class="ripple-container"></div>
+                    </a>
+                    <div class="toolbar cl-addbtn-outer">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <!--        Here you can write extra buttons/actions for the toolbar              -->
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <form asp-action="Categories" method="get" asp-controller="Violations">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <input asp-for="Searchstring" class="form-control" placeholder="Category">
+                            </div>
+                            <div class="col-sm-4">
+                                <select asp-for="TypeId" asp-items="Model.Types" class="form-control">
+                                    <option value="00000000-0000-0000-0000-000000000000">Type</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-4 srchbtn" style="margin-top:9px;">
+
+                                <button type="submit" class="btn btn-primary btn-round btn-fab btn-fab-mini">
+                                    <i class="material-icons">search</i>
+                                    <div class="ripple-container"></div>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="material-datatables responsivetable">
+                        <table id="datatables" class="table table-striped table-no-bordered table-hover" cellspacing="0" width="100%" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <a class="HeadColor" asp-action="Categories"
+                                           asp-route-sortDirection="@Model.OppositeSortDirection"
+                                           asp-route-sortOrder="@ViolationCategoryListViewModel.NameSortParam"
+                                           asp-route-Searchstring="@Model.Searchstring"
+                                           asp-route-TypeId="@Model.TypeId">Name</a>
+                                    </th>
+                                    <th>
+                                        <a class="HeadColor" asp-action="Categories"
+                                           asp-route-sortDirection="@Model.OppositeSortDirection"
+                                           asp-route-sortOrder="@ViolationCategoryListViewModel.TypeSortParam"
+                                           asp-route-Searchstring="@Model.Searchstring"
+                                           asp-route-TypeId="@Model.TypeId">Type</a>
+                                    </th>
+
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @foreach (var violation in Model.Violations)
+                                {
+                                    <tr>
+                                        <td>
+                                            <a href="EditCategory?Id=@violation.Id" class="blue-link">@violation.Name</a>
+                                        </td>
+                                        <td>
+                                            <a href="EditCategory?Id=@violation.Id" class="blue-link">@violation.TypeName</a>
+                                        </td>
+
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="pull-left">
+                                <cs-pager cs-paging-info="@Model.Paging"
+                                          cs-paging-pagesize="@Model.Paging.ItemsPerPage"
+                                          cs-paging-pagenumber="@Model.Paging.CurrentPage"
+                                          cs-paging-totalitems="@Model.Paging.TotalItems"
+                                          cs-pagenumber-param="page"
+                                          cs-show-first-last="true"
+                                          cs-suppress-empty-nextprev="true"
+                                          cs-suppress-inactive-firstlast="true"
+                                          cs-first-page-text="First"
+                                          cs-last-page-text="Last"
+                                          cs-pager-li-current-class="active"
+                                          cs-pager-li-non-active-class="disabled"
+                                          cs-paging-maxpageritems="10"
+                                          cs-first-page-title=" First Page"
+                                          cs-last-page-title="Last Page"
+                                          cs-next-page-title=" Next page"
+                                          cs-pager-ul-class=" pagination"
+                                          cs-ajax-mode="replace"
+                                          cs-ajax-success-empty=" a callback"
+                                          cs-ajax-failure-empty=" a callback"
+                                          asp-route-sortDirection="@Model.SortDirection"
+                                          asp-route-sortOrder="@Model.SortOrder"
+                                          asp-route-Searchstring="@Model.Searchstring"
+                                          asp-route-TypeId="@Model.TypeId"
+                                          asp-route-PageSize="@Model.PageSize"
+                                          asp-controller="Violations"
+                                          asp-action="Types">
+
+                                </cs-pager>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <p class="mt pull-right">
+                                Total results: @Model.Paging.TotalItems
+                            </p>
+                            @*<div class="clearfix">
+
+                        </div>*@
+                        </div>
+                    </div>
+                </div>
+
+                <!-- end content-->
+            </div>
+            <!--  end card  -->
+        </div>
+        <!-- end col-md-12 -->
+    </div>
+    <!-- end row -->
+</div>

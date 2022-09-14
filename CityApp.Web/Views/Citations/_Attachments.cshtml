@@ -1,0 +1,99 @@
+@model CitationViolationListItem
+@{
+    var globalViewData = (GlobalViewDataModel)ViewData[ViewDataKey.GlobalViewData];
+
+    var attachments = Model.CitationAttachment.Where(m => m.AttachmentType == CitationAttachmentType.File).OrderByDescending(m => m.CreatedDate);
+}
+<div>
+    @Html.HiddenFor(m => m.Id)
+</div>
+<form class="with-loader" method="post" asp-action="UploadFile" asp-controller="Citations" enctype="multipart/form-data" asp-route-id="@Model.Id">
+    <div class="col-sm-10">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="form-group label-floating">
+                    <input type="file" name="files" multiple style="opacity:1;position:relative;" />
+
+                </div>
+            </div>
+            <div class="col-md-4">
+                <input type="submit" value="Upload" class="btn btn-fill btn-rose" />
+                <button style="display:none" type="button" id="btnCancelUpload" class="btn btn-fill btn-rose">Cancel<div class="ripple-container"></div></button>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div class="col-md-12">
+    <div class="card">
+        <div class="card-content">
+            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+
+                @foreach (var CitationAttachment in attachments)
+                {
+                    <div class="row" style="padding-top:30px;">
+                        <div class="col-xs-12 col-md-7">
+                            @if (@CitationAttachment.AttachmentType.HasFlag(CitationAttachmentType.File))
+                            {
+                                <div class="card-header card-header-icon" data-background-color="blue">
+                                    <i class="material-icons">insert_drive_file</i>
+                                </div>
+                                <div class="cl_smAttch">
+                                    <a asp-controller="Citations" class="lnkDisplayAttachment" asp-action="DownloadAttachment" asp-route-attachmentKey=@CitationAttachment.Key asp-route-fileName="@CitationAttachment.FileName">@CitationAttachment.FileName</a>
+                                    <a href="javascript:;void()" attachmentId="@CitationAttachment.AttachmentId" class="btn btn-simple btn-info btn-icon like clsDeleteAttachment" style="padding-left:4px;"><i class="material-icons">delete_forever</i></a>
+
+                                    @*<a href="@Url.Action("DeleteAttachment", "Citations", new { attachmentId = @CitationAttachment.AttachmentId })" class="btn btn-simple btn-info btn-icon like" style="padding-left:4px;"><i class="material-icons">delete_forever</i></a>*@
+
+                                </div>
+                            }
+                            else if (@CitationAttachment.AttachmentType.HasFlag(CitationAttachmentType.Image))
+                            {
+                                <div class="card-header card-header-icon" data-background-color="blue">
+                                    <i class="material-icons">insert_photo</i>
+                                </div>
+                                <div class="cl_smAttch">
+                                    <a href="javascript:void(0)" class="lnkDisplayAttachment" AttachmentType="image">@CitationAttachment.DisplayName</a>
+                                    <a href="javascript:void(0)" attachmentId="@CitationAttachment.AttachmentId" class="btn btn-simple btn-info btn-icon like clsDeleteAttachment" style="padding-left:4px;"><i class="material-icons">delete_forever</i></a>
+                                    @*<a href="@Url.Action("DeleteAttachment", "Citations", new { attachmentId = @CitationAttachment.AttachmentId })" class="btn btn-simple btn-info btn-icon like" style="padding-left:4px;"><i class="material-icons">delete_forever</i></a>*@
+                                    @Html.HiddenFor(m => @CitationAttachment.Key, new { id = "hdnAttachmentKey" })
+                                </div>
+                            }
+                            else if (@CitationAttachment.AttachmentType.HasFlag(CitationAttachmentType.Video))
+                            {
+                                <div class="card-header card-header-icon" data-background-color="blue">
+                                    <i class="material-icons">perm_media</i>
+                                </div>
+                                <div class="cl_smAttch">
+                                    <a href="javascript:void(0)" class="lnkDisplayAttachment" AttachmentType="video">@CitationAttachment.DisplayName</a>
+                                    <a href="javascript:void(0)" attachmentId="@CitationAttachment.AttachmentId" class="btn btn-simple btn-info btn-icon like clsDeleteAttachment" style="padding-left:4px;"><i class="material-icons">delete_forever</i></a>
+                                    @*<a href="@Url.Action("DeleteAttachment", "Citations", new { attachmentId = @CitationAttachment.AttachmentId })" class="btn btn-simple btn-info btn-icon like" style="padding-left:4px;"><i class="material-icons">delete_forever</i></a>*@
+                                    @Html.HiddenFor(m => @CitationAttachment.Key, new { id = "hdnAttachmentKey" })
+                                </div>
+                            }
+                        </div>
+                        <div class="col-xs-12 col-md-5 text-right">
+                            <div class="row">
+                                <div class="col-sm-12 text-right">
+                                    <h6 class="card-title"><b>@CitationAttachment.CreatedDate.UTCToAccountLocalTime(globalViewData.TimeZone)</b></h6>
+                                </div>
+                                <div class="col-sm-12 text-right">
+                                    <h6 class="card-title"><b>Uploaded By @CitationAttachment.CreatedBy</b></h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts
+{
+
+    <script type="text/javascript">
+        objCitation = {
+            DeleteUrl: '@Url.Action("DeleteAttachment", "Citations")'
+        };
+    </script>
+}

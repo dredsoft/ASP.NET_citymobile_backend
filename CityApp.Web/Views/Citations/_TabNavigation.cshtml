@@ -1,0 +1,71 @@
+@model CitationsListViewModel
+@{
+    var globalViewData = (GlobalViewDataModel)ViewData[ViewDataKey.GlobalViewData];
+
+    var violationTypes = globalViewData.ViolationTypes;
+    var action = ViewContext.RouteData.Values["Action"].ToString().ToLower();
+    var controller = ViewContext.RouteData.Values["Controller"].ToString().ToLower();
+    var test = "";
+    var allUrl = Url.Action("");
+}
+
+
+<div class="card-header card-header-tabs" data-background-color="green">
+    <div class="nav-tabs-navigation">
+        <div class="nav-tabs-wrapper">
+            <span class="nav-tabs-title">Issues:</span>
+            <ul class="nav nav-tabs" data-tabs="tabs">
+                @{var isActive = "";
+                    if (Model.ViolationTypeId.HasValue == false)
+                    {
+                        isActive = "active";
+                    }
+                }
+
+                <li class="@isActive">
+                    <a 
+                       asp-route-sortDirection="@Model.OppositeSortDirection"
+                       asp-route-sortOrder="@CityApp.Web.Models.Citations.CitationsListViewModel.DetailSortParam"
+                       asp-route-CreatedFrom="@Model.CreatedFrom"
+                       asp-route-Createdto="@Model.CreatedTo"
+                       asp-route-StatusId="@Model.StatusId"
+                       asp-route-LicensePlate="@Model.LicensePlate"
+                       asp-route-action="@action"
+                       asp-route-controller="Citations"
+                       asp-route-AssignedToId="@Model.AssignedToId">
+                    @*<i class="material-icons">info</i>*@
+                    All</a>
+                </li>
+
+                @foreach (var violation in violationTypes)
+                {
+                    @if (violation.Id == Model.ViolationTypeId)
+                    {
+                        isActive = "active";
+                    }
+                    else
+                    {
+                        isActive = "";
+                    }
+                    <li class="@isActive">
+                        <a 
+                           asp-route-sortDirection="@Model.OppositeSortDirection"
+                           asp-route-sortOrder="@CityApp.Web.Models.Citations.CitationsListViewModel.DetailSortParam"
+                           asp-route-CreatedFrom="@Model.CreatedFrom"
+                           asp-route-Createdto="@Model.CreatedTo"
+                           asp-route-StatusId="@Model.StatusId"
+                           asp-route-LicensePlate="@Model.LicensePlate"
+                           asp-route-ViolationTypeId="@violation.Id"
+                           asp-route-action="@action"
+                           asp-route-controller="Citations"
+                           asp-route-AssignedToId="@Model.AssignedToId">
+                        @*<i class="material-icons">info</i>*@
+                            @violation.DisplayName   
+                        <div class="ripple-container"></div>
+                        </a>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+</div>

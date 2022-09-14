@@ -1,0 +1,63 @@
+.tab {
+    display: inline-block;
+    position: relative;
+    float: left;
+    height: 48px;
+    line-height: 48px;
+    text-align: center;
+    min-width: 72px;
+    max-width: 264px;
+    padding: 0 12px;
+    font-size: 14px;
+    font-weight: $medium;
+    text-transform: uppercase;
+    cursor: pointer;
+    @extend .mono;
+    @extend .single-line;
+    @extend .secondary-text-color;
+    &:after {
+        content: "";
+        width: auto;
+        height: 2px;
+        position: absolute;
+        bottom: 0;
+        @extend .divider-color;
+    }
+    &:hover {
+        &:after {
+            left: 0;
+            right: 0;
+        }
+    }
+    &.active {
+        @extend .primary-text-color;
+    }
+}
+
+.tabs-list {
+    position: relative;
+    overflow: hidden;
+    height: 48px;
+    li{
+        @extend .tab;
+    }
+    .indicator {
+        height: 2px;
+        position: absolute;
+        bottom: 0;
+        width: auto;
+        left: 100%;
+        right: 100%;
+        background-color: $brand-primary-accent;
+        will-change: transform, left, right;
+        transition: left .18s ease, right .18s ease;
+    }
+    &colored {
+        li, i {
+            color: #fff;
+        }
+        .indicator {
+            background-color: #fff;
+        }
+    }
+}

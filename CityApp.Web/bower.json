@@ -1,0 +1,24 @@
+{
+  "name": "asp.net",
+  "private": true,
+  "dependencies": {
+    "bootstrap": "3.3.7",
+    "jquery": "2.2.0",
+    "jquery-validation": "1.14.0",
+    "jquery-ui": "1.12.1",
+    "jquery-validation-unobtrusive": "3.2.6",
+    "perfect-scrollbar": "0.7.0",
+    "material": "0.1.1",
+    "select2": "4.0.3",
+    "datetimepicker": "*",
+    "blockUI": "*",
+    "chartist": "0.11.0",
+    "sweetalert2": "*",
+    "summernote": "*",
+    "html.sortable": "*",
+    "underscore": "1.8.3"
+  },
+  "resolutions": {
+    "jquery": ">=1.6"
+  }
+}

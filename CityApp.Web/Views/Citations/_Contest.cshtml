@@ -1,0 +1,42 @@
+@model CitationViolationListItem
+@{
+    var globalViewData = (GlobalViewDataModel)ViewData[ViewDataKey.GlobalViewData];
+    var loggedInUser = (LoggedInUser)ViewData[ViewDataKey.LoggedInUser];
+}
+
+    <div class="card">
+        <div class="card-content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <h3>Contested Information </h3>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-6">
+                    <h4>Reason</h4>
+                    <p>I already paid for this ticket.  Please see the attachment. </p>
+                </div>
+                <div class="col-xs-6">
+                    <h4>Attachments</h4>
+                    <table class="table table-striped">
+                        <tr>
+                            <th>File Name</th>
+                            <th>Description</th>
+                            <th>Uploaded</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <a class="lnkDisplayAttachment" href="/1014/Citations/DownloadAttachment?attachmentKey=accounts%2F1014%2Fcitations%2F1000300%2F88c4a535-0a81-417b-b893-81823e3808be.txt&amp;fileName=CitationReceipt.txt">CitationReceipt.txt</a>
+                            </td>
+                            <td>
+                                Receipt of ticket.
+                            </td>
+                            <td>
+                                @DateTime.Now.AddDays(-1).ToShortDateString()
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>

@@ -1,0 +1,51 @@
+/* ANIMATIONS
+   ========================================================================== */
+
+//Fade In Up
+
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(100%);
+    }
+    30% {
+        opacity: 0;
+    }
+    80%{
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+
+.fade-in-up {
+    animation-name: fadeInUp;
+    animation-duration: .3s;
+}
+
+
+//Fade In Up Long
+
+@keyframes fadeInUpLong {
+    0% {
+        opacity: 0;
+        transform: translateY(300%);
+    }
+    30% {
+        opacity: 0;
+    }
+    80%{
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+
+.fade-in-up-long {
+    animation-name: fadeInUpLong;
+    animation-duration: .38s;
+}

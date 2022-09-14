@@ -1,0 +1,157 @@
+﻿@model AccountViewModel
+
+@{
+    ViewData["Title"] = "Edit Account";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header card-header-icon" data-background-color="green">
+                    Edit Account
+                </div>
+                <div class="card-content">
+
+                    <form method="post" role="form" asp-antiforgery="true" class="with-ajax">
+                        <div>
+                            @Html.HiddenFor(m => m.Id)
+                            @Html.HiddenFor(m => m.PartitionId)
+                            @Html.HiddenFor(m => m.CityId)
+                        </div>
+                        <div class="row mrgnTop30">
+                            <div class="col-sm-12">
+                                <div asp-validation-summary="ModelOnly"></div>
+                            </div>
+                        </div>
+                        <div class="col-sm-10">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group label-floating">
+                                        <label asp-for="Name" class="control-label"></label>
+                                        <input asp-for="Name" type="text" class="form-control">
+                                        <span asp-validation-for="Name" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group label-floating">
+                                        <label asp-for="OwnerId" class="control-label"></label>
+                                        <select asp-for="OwnerId" asp-items="Model.Users" class="form-control TypeaheadSelect">
+                                            <option value="00000000-0000-0000-0000-000000000000">select owner</option>
+                                        </select>
+                                        <span asp-validation-for="OwnerId" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group label-floating">
+                                        <label asp-for="CityName" class="control-label"></label>
+                                        <input asp-for="CityName" type="text" class="form-control" readonly="readonly" disabled />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group label-floating">
+                                        <label asp-for="PartitionName" class="control-label"></label>
+                                        <input asp-for="PartitionName" type="text" class="form-control" readonly="readonly" disabled />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group label-floating">
+                                        <label asp-for="CitationWorkflow" class="control-label"></label>
+                                        <select asp-for="CitationWorkflow" asp-items="Model.CitationWorkflowItems" class="form-control"></select>
+                                        <span asp-validation-for="CitationWorkflow" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                      
+                            @if (Model.AccViolationType.Count > 0)
+                            {
+                                <div class="row mt">
+                                    <div class="col-md-12">
+                                        <h4>Violation Type Offerings</h4>
+                                        <hr />
+                                    </div>
+                                </div>
+                            }
+                            <div class="row">
+
+                                @for (int i = 0; i < Model.AccViolationType.Count; i++)
+                                {
+                                    <div class="col-md-4">
+                                        <div class="form-group label-floating checkbox">
+                                            <label>
+                                                <input type="checkbox" asp-for="@Model.AccViolationType[i].IsCheckedViolation">
+                                                @Model.AccViolationType[i].TypeName
+
+                                                <input type="hidden" asp-for="@Model.AccViolationType[i].TypeId">
+                                                <input type="hidden" asp-for="@Model.AccViolationType[i].TypeName">
+                                            </label>
+                                            <br />
+                                        </div>
+                                    </div>
+
+                                }
+                            </div>
+                            <hr />
+                            <div class="row mt">
+                                <div class="col-md-12">
+                                    <h4>Features</h4>
+                                    <hr />
+                                </div>
+                            </div>
+                            <div class="row">
+                                @foreach (AccountFeatures permission in Enum.GetValues(typeof(AccountFeatures)))
+                                {
+                                    if (Model.Features.HasFlag(permission))
+                                    {
+
+                                        <div class="form-group col-sm-4 checkbox">
+                                            <label>
+                                                <input type="checkbox" name="Features" checked="checked" value="@permission.ToString()" class="permission-checkbox permissionbox" />
+                                                @permission.GetName()
+                                            </label>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="form-group col-sm-4 checkbox">
+                                            <label>
+                                                <input type="checkbox" name="Features" value="@permission.ToString()" class="permission-checkbox permissionbox" />
+                                                @permission.GetName()
+                                            </label>
+                                        </div>
+                                    }
+
+                                }
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <button type="submit" class="btn btn-fill btn-rose">Update<div class="ripple-container"></div></button>
+                                    <a asp-controller="Accounts" asp-action="Cancel"> Cancel</a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+
+                    <!-- end content-->
+                </div>
+                <!--  end card  -->
+            </div>
+            <!-- end col-md-12 -->
+        </div>
+        <!-- end row -->
+    </div>
+</div>
+
+@section scripts
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".TypeaheadSelect").select2();
+        });
+    </script>
+}

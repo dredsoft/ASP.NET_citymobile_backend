@@ -1,0 +1,73 @@
+.ratio-wrapper{
+    width: 100%;
+    display: block;
+    position: relative;
+    overflow: hidden;
+    &:after {
+        display: block;
+        content: '';
+    }
+    img {
+        position: absolute;
+        display: block;
+        width: 100%;
+        height: auto;
+        margin: auto;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+    }
+}
+
+._2-1 {
+    @extend .ratio-wrapper;
+        &:after{
+          padding-top: 50%;
+          /* 2:1 ratio */
+        }
+}
+
+._16-9 {
+    @extend .ratio-wrapper;
+        &:after{
+          padding-top: 56.25%;
+          /* 16:9 ratio */
+        }
+}
+
+._3-2 {
+    @extend .ratio-wrapper;
+        &:after{
+          padding-top: 66.66%;
+          /* 3:2 ratio */
+        }
+}
+._4-3 {
+    @extend .ratio-wrapper;
+        &:after{
+          padding-top: 75%;
+          /* 4:3 ratio */
+        }
+}
+._1-1 {
+    @extend .ratio-wrapper;
+        &:after{
+          padding-top: 100%;
+          /* 1:1 ratio */
+        }
+}
+._3-4 {
+    @extend .ratio-wrapper;
+        &:after{
+          padding-top: 133%;
+          /* 3:4 ratio */
+        }
+}
+._2-3 {
+    @extend .ratio-wrapper;
+        &:after{
+          padding-top: 150%;
+          /* 2:3 ratio */
+        }
+}

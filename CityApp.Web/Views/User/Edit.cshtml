@@ -1,0 +1,147 @@
+@model UserModel
+@{
+    Layout = "_InternalLayout";
+}
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header card-header-icon" data-background-color="green">
+                    Edit User
+                </div>
+                <div class="card-content">
+
+                    <form method="post" role="form" asp-antiforgery="true" enctype="multipart/form-data" class="with-ajax">
+                        <div>
+                            @Html.HiddenFor(m => m.Id)
+                            @Html.HiddenFor(m => m.ProfileImageKey)
+                        </div>
+                        <div class="row mrgnTop30">
+                            <div class="col-sm-12">
+                                <div asp-validation-summary="ModelOnly"></div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group label-floating">
+                                        <label asp-for="FirstName" class="control-label"></label>
+                                        <input asp-for="FirstName" type="text" class="form-control">
+                                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group label-floating">
+                                        <label asp-for="LastName" class="control-label"></label>
+                                        <input asp-for="LastName" type="text" class="form-control">
+                                        <span asp-validation-for="LastName" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group label-floating">
+                                        <label asp-for="Email" class="control-label"></label>
+                                        <input asp-for="Email" type="text" class="form-control">
+                                        <span asp-validation-for="Email" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group label-floating">
+                                        <label asp-for="OldPassword" class="control-label"></label>
+                                        <input asp-for="OldPassword" type="Password" class="form-control">
+                                        <span asp-validation-for="OldPassword" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group label-floating">
+                                        <label asp-for="Password" class="control-label"></label>
+                                        <input asp-for="Password" type="Password" class="form-control">
+                                        <span asp-validation-for="Password" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group label-floating">
+                                        <label asp-for="ConfirmPassword" class="control-label"></label>
+                                        <input asp-for="ConfirmPassword" type="Password" class="form-control">
+                                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row mt">
+                                <div class="col-md-4 col-sm-4">
+                                    <div class="fileinput fileinput-new text-center" data-provides="fileinput">
+                                        <div class="fileinput-new thumbnail">
+                                            @if (!string.IsNullOrWhiteSpace(Model.ImageName))
+                                            {
+                                                <img src="data:image/png;base64,@Model.ImageName" alt="..." />
+
+                                            }
+                                            else
+                                            {
+                                                <img src="~/images/image_placeholder.jpg" alt="..." />
+                                            }
+                                        </div>
+                                        <div class="fileinput-preview fileinput-exists thumbnail"></div>
+                                        <div>
+                                            <span class="btn btn-rose btn-round btn-file">
+                                                <span class="fileinput-new">Select image</span>
+                                                <span class="fileinput-exists">Change</span>
+                                                <input type="file" name="files" accept=".png, .gif, .jpg, .jpeg" />
+                                            </span>
+                                            <a href="#pablo" class="btn btn-danger btn-round fileinput-exists" data-dismiss="fileinput"><i class="fa fa-times"></i> Remove</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <button type="submit" class="btn btn-fill btn-rose">Update<div class="ripple-container"></div></button>
+
+                                    <a href="javascript:;"> Cancel</a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+
+                    <!-- end content-->
+                </div>
+                <!--  end card  -->
+            </div>
+            <!-- end col-md-12 -->
+        </div>
+        <!-- end row -->
+    </div>
+</div>
+
+@section scripts
+{
+    <script async defer
+            src="~/js/jasny-bootstrap.min.js">
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var Successmsg = '@Html.Raw(ViewBag.SucessMessage)';
+            if (Successmsg) {
+                demo.showNotification("success", Successmsg);
+            }
+        });
+
+        $("form").submit(function(){
+        blockUI();
+            });
+
+    </script>
+}
+
+
+

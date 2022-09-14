@@ -1,0 +1,47 @@
+@model AcceptInvite
+@{
+    Layout = "_ExternalLayout";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 col-sm-6 col-sm-offset-3">
+            <div class="card">
+                <div class="card-header card-header-icon" data-background-color="green">
+                    Invitation
+                </div>
+                <div class="card-content">
+                    <form method="post" role="form" asp-antiforgery="true" class="with-ajax">
+                        @if (ViewBag.SucessMessage != null)
+                        {
+                            
+                                <h3>@ViewBag.SucessMessage</h3>
+                            
+                        }
+                        else
+                        {
+
+                            <div class="row">
+                                <div class="col-sm-12 mt">
+                                    @Html.HiddenFor(m => m.InvitedEmail)
+                                    @Html.HiddenFor(m => m.AccountId)
+                                    @Html.HiddenFor(m => m.Name)
+                                    @Html.HiddenFor(m => m.Permission)
+                                    @Html.HiddenFor(m => m.VendorId)
+                                    @Html.HiddenFor(m => m.SystemPermission)
+                                    <p>Hello <strong> @Model.Name</strong> </p>
+
+                                    <p>You have been invited to join City of <span>@Model.AccountName</span>.</p>
+                                </div>
+                                <div class="footer text-center">
+                                    <button class="btn btn-primary btn-round" type="submit">Accept</button>
+                                    <a asp-action="Index" asp-controller="Accounts"> Cancel</a>
+                                </div>
+                            </div>
+                        }
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

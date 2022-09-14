@@ -1,0 +1,18 @@
+﻿@{
+    Layout = "_Layout";
+}
+
+@section sidebar{@Html.Partial("_Sidebar")}
+@section headerNavigation{@Html.Partial("_Header")}
+
+@section styles
+{
+    @RenderSection("styles", required: false)
+}
+
+@RenderBody()
+
+@section scripts
+{
+    @RenderSection("scripts", required: false)
+}

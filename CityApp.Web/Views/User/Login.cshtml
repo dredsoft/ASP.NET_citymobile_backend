@@ -1,0 +1,67 @@
+﻿@model LoginModel
+@{ 
+    Layout = "_ExternalLayout";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4 col-sm-6 col-md-offset-4 col-sm-offset-3">
+            <form asp-antiforgery="true" class="form-signin">
+                <div class="card card-login">
+                    <div class="card-header text-center" data-background-color="blue">
+                        <h4 class="card-title">Login</h4>
+                        @*<div class="social-line">
+                            <a href="#btn" class="btn btn-just-icon btn-simple">
+                                <i class="fa fa-facebook-square"></i>
+                            </a>
+                            <a href="#pablo" class="btn btn-just-icon btn-simple">
+                                <i class="fa fa-twitter"></i>
+                            </a>
+                            <a href="#eugen" class="btn btn-just-icon btn-simple">
+                                <i class="fa fa-google-plus"></i>
+                            </a>
+                        </div>*@
+                    </div>
+                    @*<p class="category text-center">
+                        Or Be Classical
+                    </p>*@
+                    <div class="card-content">
+                        <div asp-validation-summary="ModelOnly"></div>
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="material-icons">email</i>
+                            </span>
+                            <div class="form-group label-floating">
+                                <label class="control-label">Email address</label>
+                                <input asp-for="Email" type="email" class="form-control">
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="material-icons">lock_outline</i>
+                            </span>
+                            <div class="form-group label-floating">
+                                <label class="control-label">Password</label>
+                                <input  asp-for="Password" type="password" class="form-control" autocomplete="off">
+                                <span asp-validation-for="Password" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <a asp-controller="User" asp-action="ForgetPassword">Forget Password</a>
+                        </div>
+                    </div>
+                    <div class="footer text-center">
+                        <button type="submit" class="btn btn-rose btn-simple btn-wd btn-lg">Let's go</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section scripts
+{
+
+
+}
